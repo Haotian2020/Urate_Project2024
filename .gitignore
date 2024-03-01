@@ -1,6 +1,6 @@
 # private files
 script/specify_paths.R
-Bin
+script/bin/
 
 # History files
 .Rhistory

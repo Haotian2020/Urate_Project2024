@@ -11,3 +11,4 @@ uvmr <- function(exposure, outcome) {
                                   phenotype_col = "exposure")
 
 }
+
