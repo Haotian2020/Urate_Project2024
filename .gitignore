@@ -1,5 +1,5 @@
 # private files
-scripts/specify_paths.R
+script/specify_paths.R
 
 # History files
 .Rhistory
