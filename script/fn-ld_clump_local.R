@@ -10,8 +10,8 @@ ld_clump_local =  function(out_dat, threshold) {
     bfile = paste0(rdsf_personal, "data/1kg_eur/EUR")
   )
   ins = subset(tmp,SNP%in%snps$rsid)
-  ss = subset(out_dat,SNP%in%snps$rsid) %>% select(c("SNP","samplesize.outcome"))
-  colnames(ss) = c("SNP","samplesize.exposure") 
+  ss = subset(out_dat,SNP%in%snps$rsid) %>% select(c("SNP","chr.outcome","pos.outcome","samplesize.outcome"))
+  colnames(ss) = c("SNP","chr.exposure","pos.exposure","samplesize.exposure") 
   ins = merge(ins,ss,by ="SNP")
   return(ins)
 }
