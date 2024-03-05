@@ -15,20 +15,21 @@ source("specify_paths.R")
 exurate_gwas = vroom(paste0(rdsf_personal,"data/urate_chr1_22_LQ_IQ06_mac10_EA_60_prec1_nstud30_summac400_rsid.txt")) %>% 
   subset(!is.na(RSID))
 
-  exurate_gwas_format = format_data(
-    exurate_gwas,
-    type = "outcome",
-    snp_col = "RSID",
-    beta_col = "Effect",
-    se_col = "StdErr",
-    effect_allele_col = "Allele1",
-    other_allele_col = "Allele2",
-    eaf_col = "Freq1",
-    pval_col = "P-value",
-    chr_col = "Chr",
-    pos_col = "Pos_b37",
-    samplesize_col = "n_total_sum")
-  exurate_gwas_format$outcome = "Urate CKDGen"
+exurate_gwas_format = format_data(
+  exurate_gwas,
+  type = "outcome",
+  snp_col = "RSID",
+  beta_col = "Effect",
+  se_col = "StdErr",
+  effect_allele_col = "Allele1",
+  other_allele_col = "Allele2",
+  eaf_col = "Freq1",
+  pval_col = "P-value",
+  chr_col = "Chr",
+  pos_col = "Pos_b37",
+  samplesize_col = "n_total_sum"
+)
+exurate_gwas_format$outcome = "Urate CKDGen"
 
 # Transform to SD unit ---------------------------------------------------------
 
@@ -39,9 +40,6 @@ exurate_sd_gwas_format$se.outcome = exurate_sd_gwas_format$se.outcome/1.5
 # Find tophits -----------------------------------------------------------------
 
 exurate_sd_tophits = ld_clump_local(exurate_sd_gwas_format,5e-8)
-exurate_samplesizeinfo = subset(exurate_gwas_format,SNP%in%exurate_sd_tophits$SNP)[,c("SNP","samplesize.outcome")]
-colnames(exurate_samplesizeinfo) = c("SNP","samplesize.exposure")
-exurate_sd_tophits = merge(exurate_sd_tophits,exurate_samplesizeinfo,by = c("SNP"))
 
 # Save formated outcome and instruments ----------------------------------------
 
@@ -51,7 +49,7 @@ write.table(exurate_sd_gwas_format, file = paste0(rdsf_personal,"data/format_dat
 
 
 # Format eGFR_crea 2019 GWAS ---------------------------------------------------
-egfr_gwas_outcome = fread(paste0(rdsf_personal,"data/20171017_MW_eGFR_overall_EA_nstud42.dbgap.txt"))
+egfr_gwas_outcome = fread(paste0(rdsf_personal,"data/20171017_MW_eGFR_overall_EA_nstud42.dbgap.txt")) %>% data.frame()
 
 egfr_gwas_outcome_format = format_data(egfr_gwas_outcome,
                                        type = 'outcome',
@@ -61,11 +59,11 @@ egfr_gwas_outcome_format = format_data(egfr_gwas_outcome,
                                        effect_allele_col = "Allele1",
                                        other_allele_col = "Allele2",
                                        eaf_col = "Freq1",
-                                       pval_col = "P-value",
+                                       pval_col = "P.value",
                                        samplesize_col = "n_total_sum",
                                        chr_col = "Chr",
                                        pos_col = "Pos_b37")
-egfr_gwas_outcome_format$outcome = 'eGFR CKDGen'
+egfr_gwas_outcome_format$outcome = "eGFR CKDGen"
 
 # Transform to SD unit ---------------------------------------------------------
 egfr_gwas_outcome_sd_format = egfr_gwas_outcome_format
