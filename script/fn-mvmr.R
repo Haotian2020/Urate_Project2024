@@ -1,0 +1,93 @@
+# function for mvmr
+
+getwd()
+ao <- available_outcomes(access_token = NULL)
+`%notin%` <- Negate(`%in%`)
+source("fn-get_mv_exp.R")
+
+MVMR_function  <- function(exp1,exp2,outcome1){
+  
+  # extract instruments ----------------------------------------------------------
+  # identify if it is from IEU open GWAS database --------------------------------
+  
+  if(exp1%in%ao$id & exp2%in%ao$id){
+    exptophits1 = extract_instruments(exp1)
+    exptophits2 = extract_instruments(exp2)
+    tophits_list <- list(exptophits1, exptophits2)
+    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    expgwas1 = extract_outcome_data(snps = tophits, outcomes = exp1)
+    expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2)
+    full_gwas_list <- list(expgwas1, expgwas2)
+    print("both expsures are extracted from IEU open GWAS")
+    
+  }else if(exp1%notin%ao$id & exp2%notin%ao$id){
+    exptophits1 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv"))
+    exptophits2 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp2,"_tophits.tsv"))
+    tophits_list <- list(exptophits1, exptophits2)
+    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv"))
+    expgwas2 = vroom(paste0(rdsf_personal,"data/format_data/",exp2,"_GWAS_tidy_outcome.csv"))
+    full_gwas_list <- list(expgwas1, expgwas2)
+    print("both expsures are extracted from local")
+  }else if(exp1%notin%ao$id & exp2%in%ao$id){
+    exptophits1 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv"))
+    exptophits2 = extract_instruments(exp2)
+    exptophits2$chr.exposure = as.numeric(exptophits2$chr.exposure)
+    exptophits2$pos.exposure = as.numeric(exptophits2$pos.exposure)
+    print(colnames(exptophits1))
+    exptophits2 = exptophits2[,colnames(exptophits1)]
+    
+    tophits_list <- list(exptophits1, exptophits2)
+    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv"))
+    expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2)
+    full_gwas_list <- list(expgwas1, expgwas2)
+    print("exp1 is extracted from local")
+    print("exp2 is extracted from IEU open GWAS")
+  }else if(exp1%in%ao$id & exp2%notin%ao$id){
+    exptophits1 = extract_instruments(exp1)
+    exptophits2 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp2,"_tophits.tsv"))
+    exptophits1 = exptophits1[,colnames(exptophits2)]
+    
+    tophits_list <- list(exptophits1, exptophits2)
+    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    expgwas1 = extract_outcome_data(snps = tophits, outcomes = exp1)
+    expgwas2 = vroom(paste0(rdsf_personal,"data/format_data/",exp2,"_GWAS_tidy_outcome.csv"))
+    full_gwas_list <- list(expgwas1, expgwas2)
+    print("exp1 is extracted from IEU open GWAS")
+    print("exp2 is extracted from local")}
+  
+  # make instruments list --------------------------------------------------------
+  
+  print("create the whole exp infor from two exposures")
+  exposures <- bind_rows(tophits_list)
+  # print(head(exposures))
+  print("using get_mv_exp function")
+  exposure_dat <- get_mv_exposures(tophits_list, full_gwas_list)
+  print("exposure data prepared")
+  
+  # identify if the outcome is from IEU open GWAS database -----------------------
+  
+  if(outcome1%in%ao$id){
+    outcome_dat <- extract_outcome_data(snps = exposure_dat$SNP, outcomes = outcome1)
+  }else{
+    outcome_dat <- read_outcome_data(snps = exposure_dat$SNP,
+                                     filename =  paste0(rdsf_personal,"data/format_data/",outcome1,"_GWAS_tidy_outcome.csv"),
+                                     sep = ",",
+                                     snp_col = "SNP",
+                                     beta_col = "beta.outcome",
+                                     se_col = "se.outcome",
+                                     eaf_col = "eaf.outcome",
+                                     effect_allele_col = "effect_allele.outcome",
+                                     other_allele_col = "other_allele.outcome",
+                                     pval_col = "pval.outcome")%>%mutate(outcome = outcome1)
+  }
+  
+  # perform mvmr -----------------------------------------------------------------
+  
+  mvdat <- mv_harmonise_data(exposure_dat, outcome_dat)
+  res_bmis <- mv_multiple(mvdat)
+  return(res_bmis)
+}
+
+

@@ -50,7 +50,15 @@ uvmr <- function(exposure, outcome) {
     
     ## Perform MR --------------------------------------------------------------
     
-    results <- suppressMessages(TwoSampleMR::mr(dat = dat))
+    mr <- suppressMessages(TwoSampleMR::mr(dat = dat))
+    
+    sf_dat <- steiger_function(dat)
+    
+    mr_sf = mr(subset(sf_dat, steiger_dir))
+    
+    mr_hetero_sf <- mr_heterogeneity(subset(sf_dat, steiger_dir))
+    
+    mr_pleio_sf <- mr_pleiotropy_test(subset(sf_dat, steiger_dir))
     
     ## Calculate Isq -----------------------------------------------------------
     
@@ -58,24 +66,26 @@ uvmr <- function(exposure, outcome) {
     
     isq <- Isq(dat_isq$beta.exposure,dat_isq$se.exposure)
     
-    results$Isq <- isq
+    mr$Isq <- isq
     
     # Perform Egger intercept test ---------------------------------------------
     
+    print("Perform Egger intercept test")
     plei <- TwoSampleMR::mr_pleiotropy_test(dat)
     
     # Perform heterogeneity test -----------------------------------------------
     
+    print("Perform heterogeneity test")
     hetero <- TwoSampleMR::mr_heterogeneity(dat)
     
   } else {
     
-    results <- NULL
+    mr <- NULL
     plei <- NULL
     
   }
   
-  r <- list(results, plei,hetero)
+  r <- list(mr, plei, hetero, mr_sf, mr_hetero_sf, mr_pleio_sf)
   
   return(r)
 }
