@@ -4,6 +4,7 @@ getwd()
 ao <- available_outcomes(access_token = NULL)
 `%notin%` <- Negate(`%in%`)
 source("fn-get_mv_exp.R")
+source("fn-ld_clump_local.R")
 
 MVMR_function  <- function(exp1,exp2,outcome1){
   
@@ -31,7 +32,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     print("both expsures are extracted from local")
   }else if(exp1%notin%ao$id & exp2%in%ao$id){
     exptophits1 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv"))
-    exptophits2 = extract_instruments(exp2)
+    exptophits2 = extract_instruments(exp2,access_token = NULL)
     exptophits2$chr.exposure = as.numeric(exptophits2$chr.exposure)
     exptophits2$pos.exposure = as.numeric(exptophits2$pos.exposure)
     print(colnames(exptophits1))
@@ -45,13 +46,13 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     print("exp1 is extracted from local")
     print("exp2 is extracted from IEU open GWAS")
   }else if(exp1%in%ao$id & exp2%notin%ao$id){
-    exptophits1 = extract_instruments(exp1)
-    exptophits2 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp2,"_tophits.tsv"))
+    exptophits1 = extract_instruments(exp1, access_token = NULL)
+    exptophits2 = read_tsv(paste0(rdsf_personal, "data/format_data/",exp2,"_tophits.tsv"))
     exptophits1 = exptophits1[,colnames(exptophits2)]
     
     tophits_list <- list(exptophits1, exptophits2)
     tophits <- bind_rows(tophits_list) %>% pull(SNP)
-    expgwas1 = extract_outcome_data(snps = tophits, outcomes = exp1)
+    expgwas1 = extract_outcome_data(snps = tophits, outcomes = exp1,access_token = NULL)
     expgwas2 = vroom(paste0(rdsf_personal,"data/format_data/",exp2,"_GWAS_tidy_outcome.csv"))
     full_gwas_list <- list(expgwas1, expgwas2)
     print("exp1 is extracted from IEU open GWAS")
@@ -61,7 +62,6 @@ MVMR_function  <- function(exp1,exp2,outcome1){
   
   print("create the whole exp infor from two exposures")
   exposures <- bind_rows(tophits_list)
-  # print(head(exposures))
   print("using get_mv_exp function")
   exposure_dat <- get_mv_exposures(tophits_list, full_gwas_list)
   print("exposure data prepared")

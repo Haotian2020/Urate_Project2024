@@ -1,5 +1,13 @@
+
 ld_clump_local =  function(out_dat, threshold) {
-  tmp = subset(out_dat, pval.outcome < threshold) %>% TwoSampleMR::convert_outcome_to_exposure()
+  
+  if("pval.outcome" %in% colnames(out_dat)){
+    tmp = subset(out_dat, pval.outcome < threshold) %>% TwoSampleMR::convert_outcome_to_exposure()
+    }else
+    {
+    tmp = subset(out_dat, pval.exposure < threshold)
+    }
+  
   snps = ieugwasr::ld_clump(
     dplyr::tibble(rsid = tmp$SNP,
                   pval = tmp$pval.exposure),
@@ -9,9 +17,12 @@ ld_clump_local =  function(out_dat, threshold) {
     plink_bin = genetics.binaRies::get_plink_binary(),
     bfile = paste0(rdsf_personal, "data/1kg_eur/EUR")
   )
+  
   ins = subset(tmp,SNP%in%snps$rsid)
-  ss = subset(out_dat,SNP%in%snps$rsid) %>% select(c("SNP","chr.outcome","pos.outcome","samplesize.outcome"))
-  colnames(ss) = c("SNP","chr.exposure","pos.exposure","samplesize.exposure") 
+  ss = subset(out_dat,SNP%in%snps$rsid) %>% select(c("SNP",starts_with("chr"), starts_with("pos"), starts_with("samplesize")))
+  colnames(ss) = c("SNP","chr.exposure","pos.exposure","samplesize.exposure")
+  
   ins = merge(ins,ss,by ="SNP")
+  
   return(ins)
 }
