@@ -15,7 +15,7 @@ uvmr <- function(exposure, outcome) {
 
   # Extract outcome data -------------------------------------------------------
   
-  if (outcome %in% c("egfr_sd","exurate_sd","urate_clean","sbp_clean","dbp_clean")) {
+  if (outcome %in% c("egfr_sd","exurate_sd","urate_clean","sbp_clean","dbp_clean","stroke","early50","late60","hpt")) {
     
     print(paste0("Reading ",outcome," from local formatted data"))
     out <- TwoSampleMR::read_outcome_data(snps = exp$SNP,

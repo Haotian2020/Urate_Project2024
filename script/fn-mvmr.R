@@ -69,8 +69,11 @@ MVMR_function  <- function(exp1,exp2,outcome1){
   # identify if the outcome is from IEU open GWAS database -----------------------
   
   if(outcome1%in%ao$id){
-    outcome_dat <- extract_outcome_data(snps = exposure_dat$SNP, outcomes = outcome1)
+    
+    outcome_dat <- extract_outcome_data(snps = exposure_dat$SNP, outcomes = outcome1,access_token = NULL)
+    
   }else{
+    
     outcome_dat <- read_outcome_data(snps = exposure_dat$SNP,
                                      filename =  paste0(rdsf_personal,"data/format_data/",outcome1,"_GWAS_tidy_outcome.csv"),
                                      sep = ",",
