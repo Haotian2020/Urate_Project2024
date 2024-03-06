@@ -1,17 +1,27 @@
-# function to plot mr results
+# function for lines in the figures --------------------------------------------
 
-uvmr_plot <- function(dat, exp, out, line_number, xlabel) {
+generate_lines <- function(line_number) {
+  lines <- list()
   
-  mydata  <- data.frame(dat) %>%
-     subset(.,exposure == exp, outcome == out)
-  
-# remove id.exposure and id.outcome columns ------------------------------------
-  
-  if(!is.na(mydata$id.exposure & !is.na(mydata$id.outcome))){
-    mydata = select(mydata, -c("id.exposure","id.outcome"))%>%generate_odds_ratios()
+  for (i in seq_len(line_number)) {
+    key <- as.character(i * 5 + 2)
+    lines[[key]] <- gpar(lty = 1, lwd = 1, col = "black")
   }
   
-# format data ------------------------------------------------------------------
+  return(lines)
+}
+
+# function to plot mr results
+
+uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
+  # remove id.exposure and id.outcome columns ------------------------------------
+  
+  mydata  <- data.frame(dat) %>%
+    select(-c("id.exposure", "id.outcome")) %>%
+    subset(exposure %in% exp & outcome %in% out) %>%
+    generate_odds_ratios()
+  
+  # format data ------------------------------------------------------------------
   
   mydata$beta <-
     format(round(mydata$b, digits = 3),
@@ -28,13 +38,29 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel) {
     factor(
       mydata$method,
       levels = c(
-        "Inverse variance weighted","Weighted median","Steiger Filtering",
-        "Weighted mode","MR Egger", "Simple mode"))
+        "Inverse variance weighted",
+        "Weighted median",
+        "Steiger Filtering",
+        "Weighted mode",
+        "MR Egger",
+        "Simple mode"
+      )
+    )
   
-  sorted_index <- order(mydata$method)
-  mydata = mydata[sorted_index,]
+  mydata$outcome <-
+    factor(
+      mydata$outcome,
+      levels = c("Urate CKDGen",
+                 "Urate UKB",
+                 "SBP UKB",
+                 "DBP UKB",
+                 "eGFR CKDGen")
+    )
   
-# make the table shown with the figure -----------------------------------------
+  sorted_index <- order(mydata$outcome,mydata$method)
+  mydata = mydata[sorted_index, ]
+  
+  # make the table shown with the figure -----------------------------------------
   
   for (i in c(seq(2, nrow(mydata), 5),
               seq(3, nrow(mydata), 5),
@@ -54,9 +80,9 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel) {
     c('Number of SNPs', as.character(mydata[, 'nsnp'])),
     c("Beta", as.character(mydata[, 'beta'])),
     c("95% CI", as.character(mydata[, 'CI'])),
-    c("p-value", as.character(mydata[, 'pvalue'])))
+    c("p-value", as.character(mydata[, 'pvalue']))
+  )
   
-  dev.off()
   p <- forestplot(
     tabletext,
     graph.pos = 4,
@@ -71,8 +97,7 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel) {
       xlab = gpar(cex = 1),
       title = gpar(cex = 1)
     ),
-    hrzl_lines = list(),
-    
+    hrzl_lines = generate_lines(line_number),
     boxsize = 0.15,
     line.margin = 0.1,
     lty.ci = 1,
@@ -84,9 +109,10 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel) {
     is.summary = c(T, rep(F, nrow(tabletext))),
     colgap = unit (5, "mm"),
     zero = 0.0,
-    xticks = c(-0.2,-0.1,0,0.1,0.2,0.3),
-    clip = c(-0.2,0.3),
-    xlab = paste0(""))
+    xticks = x_ticks,
+    clip = intervals,
+    xlab = paste0(xlabel)
+  )
   
-   return(p)
+  return(p)
 }
