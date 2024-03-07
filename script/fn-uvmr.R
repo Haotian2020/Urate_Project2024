@@ -1,7 +1,7 @@
 # perform uvmr
 # source: https://github.com/venexia/T2DMediationMR/blob/master/code/fn-uvmr.R
 
-uvmr <- function(exposure, outcome) {
+uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
   
   # Load instruments -----------------------------------------------------------
   
@@ -12,7 +12,7 @@ uvmr <- function(exposure, outcome) {
   print(paste0("Reading ",exposure," from all instruments file"))
   tmp_exp <- exposure
   exp <- subset(instruments,exposure == tmp_exp)
-
+  unique(exp$exposure)
   # Extract outcome data -------------------------------------------------------
   
   if (outcome %in% c("egfr_sd","exurate_sd","urate_clean","sbp_clean","dbp_clean","stroke","early50","late60","hpt")) {
@@ -35,7 +35,7 @@ uvmr <- function(exposure, outcome) {
     print("Reading from IEU open GWAS database")
     out <- TwoSampleMR::extract_outcome_data(snps = exp$SNP,
                                              outcomes = outcome,
-                                             proxies = FALSE,
+                                             proxies = TRUE,
                                              access_token = NULL)
     
   }
@@ -50,15 +50,8 @@ uvmr <- function(exposure, outcome) {
     
     ## Perform MR --------------------------------------------------------------
     
+    set.seed(123)
     mr <- suppressMessages(TwoSampleMR::mr(dat = dat))
-    
-    sf_dat <- steiger_function(dat)
-    
-    mr_sf = mr(subset(sf_dat, steiger_dir))
-    
-    mr_hetero_sf <- mr_heterogeneity(subset(sf_dat, steiger_dir))
-    
-    mr_pleio_sf <- mr_pleiotropy_test(subset(sf_dat, steiger_dir))
     
     ## Calculate Isq -----------------------------------------------------------
     
@@ -66,18 +59,57 @@ uvmr <- function(exposure, outcome) {
     
     isq <- Isq(dat_isq$beta.exposure,dat_isq$se.exposure)
     
-    mr$Isq <- isq
+    
     
     # Perform Egger intercept test ---------------------------------------------
     
     print("Perform Egger intercept test")
     plei <- TwoSampleMR::mr_pleiotropy_test(dat)
+    plei$Isq <- isq
     
     # Perform heterogeneity test -----------------------------------------------
     
     print("Perform heterogeneity test")
     hetero <- TwoSampleMR::mr_heterogeneity(dat)
     
+    # Perform steiger filtering ------------------------------------------------
+    
+    if(is.null(ncase)&is.null(ncontrol)){
+      
+      print("The units of both exposure and outcome are in SD")
+      dat$units.exposure <- "SD"
+      dat$units.outcome <- "SD"
+      
+      dat <- steiger_filtering(dat)
+      print(summary(dat$steiger_dir))
+      
+    }else
+    {
+      
+      print("The unit of exposure is in SD and the outcome are binary")
+      dat$ncase.outcome = ncase
+      dat$ncontrol.outcome = ncontrol
+      dat$prevalence.outcome = ncase/(ncase + ncontrol)
+      
+      dat$units.exposure <- "SD"
+      dat$units.outcome <- "log odds"
+
+      dat = add_rsq(dat)
+      dat$r.outcome = get_r_from_lor(lor = dat$beta.outcome,
+                                     af = dat$eaf.exposure,
+                                     ncase = unique(dat$ncase.outcome),
+                                     ncontrol = unique(dat$ncontrol.outcome),
+                                     prevalence = unique(dat$ncase.outcome)/(unique(dat$ncase.outcome+dat$ncontrol.outcome)))
+      dat$rsq.outcome = dat$r.outcome^2
+      
+      dat <- steiger_filtering(dat)
+      print(summary(dat$steiger_dir))
+    }
+    mr_sf = mr(subset(dat, steiger_dir))
+    
+    mr_hetero_sf <- mr_heterogeneity(subset(dat, steiger_dir))
+    
+    mr_pleio_sf <- mr_pleiotropy_test(subset(dat, steiger_dir))
   } else {
     
     mr <- NULL
