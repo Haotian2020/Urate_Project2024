@@ -8,8 +8,8 @@ source("fn-ld_clump_local.R")
 
 MVMR_function  <- function(exp1,exp2,outcome1){
   
-  # extract instruments ----------------------------------------------------------
-  # identify if it is from IEU open GWAS database --------------------------------
+  # extract instruments --------------------------------------------------------
+  # identify if it is from IEU open GWAS database ------------------------------
   
   if(exp1%in%ao$id & exp2%in%ao$id){
     exptophits1 = extract_instruments(exp1)
@@ -58,7 +58,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     print("exp1 is extracted from IEU open GWAS")
     print("exp2 is extracted from local")}
   
-  # make instruments list --------------------------------------------------------
+  # make instruments list ------------------------------------------------------
   
   print("create the whole exp infor from two exposures")
   exposures <- bind_rows(tophits_list)
@@ -66,7 +66,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
   exposure_dat <- get_mv_exposures(tophits_list, full_gwas_list)
   print("exposure data prepared")
   
-  # identify if the outcome is from IEU open GWAS database -----------------------
+  # identify if the outcome is from IEU open GWAS database ---------------------
   
   if(outcome1%in%ao$id){
     
@@ -86,7 +86,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
                                      pval_col = "pval.outcome")%>%mutate(outcome = outcome1)
   }
   
-  # perform mvmr -----------------------------------------------------------------
+  # perform mvmr ---------------------------------------------------------------
   
   mvdat <- mv_harmonise_data(exposure_dat, outcome_dat)
   res_bmis <- mv_multiple(mvdat)

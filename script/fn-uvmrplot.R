@@ -50,11 +50,11 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
   mydata$outcome <-
     factor(
       mydata$outcome,
-      levels = c("Urate CKDGen",
-                 "Urate UKB",
-                 "SBP UKB",
-                 "DBP UKB",
-                 "eGFR CKDGen")
+      levels = c("Urate (CKDGen)",
+                 "Urate (UKB)",
+                 "SBP (UKB)",
+                 "DBP (UKB)",
+                 "eGFR (CKDGen)")
     )
   
   sorted_index <- order(mydata$outcome,mydata$method)
