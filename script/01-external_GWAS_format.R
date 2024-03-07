@@ -29,7 +29,7 @@ exurate_gwas_format = format_data(
   pos_col = "Pos_b37",
   samplesize_col = "n_total_sum"
 )
-exurate_gwas_format$outcome = "Urate CKDGen"
+exurate_gwas_format$outcome = "Urate (CKDGen)"
 
 # Transform to SD unit ---------------------------------------------------------
 
@@ -39,11 +39,11 @@ exurate_sd_gwas_format$se.outcome = exurate_sd_gwas_format$se.outcome/1.5
 
 # Find tophits -----------------------------------------------------------------
 
-exurate_sd_tophits = ld_clump_local(exurate_sd_gwas_format,5e-8)
+exurate_sd_tophits = ld_clump_local(exurate_sd_gwas_format)
 
 # Save formated outcome and instruments ----------------------------------------
 
-write_tsv(exurate_sd_tophits, path = paste0(rdsf_personal, 'data/format_data/exurate_sd_tophits.tsv'))
+write_tsv(exurate_sd_tophits, file = paste0(rdsf_personal, 'data/format_data/exurate_sd_tophits.tsv'))
 write.table(exurate_sd_gwas_format, file = paste0(rdsf_personal,"data/format_data/exurate_sd_GWAS_tidy_outcome.csv"),
             sep= ',', row.names = F,col.names= T)
 
@@ -63,7 +63,7 @@ egfr_gwas_outcome_format = format_data(egfr_gwas_outcome,
                                        samplesize_col = "n_total_sum",
                                        chr_col = "Chr",
                                        pos_col = "Pos_b37")
-egfr_gwas_outcome_format$outcome = "eGFR CKDGen"
+egfr_gwas_outcome_format$outcome = "eGFR (CKDGen)"
 
 # Transform to SD unit ---------------------------------------------------------
 egfr_gwas_outcome_sd_format = egfr_gwas_outcome_format
@@ -71,10 +71,10 @@ egfr_gwas_outcome_sd_format$beta.outcome = egfr_gwas_outcome_sd_format$beta.outc
 egfr_gwas_outcome_sd_format$se.outcome = egfr_gwas_outcome_sd_format$se.outcome/0.13
 
 # Find tophits -----------------------------------------------------------------
-egfr_sd_tophits = ld_clump_local(egfr_gwas_outcome_sd_format,5e-8)
+egfr_sd_tophits = ld_clump_local(egfr_gwas_outcome_sd_format)
 
 # Save formated outcome and instruments ----------------------------------------
-write_tsv(egfr_sd_tophits, path = paste0(rdsf_personal,'data/format_data/egfr_sd_tophits.tsv'))
+write_tsv(egfr_sd_tophits, file = paste0(rdsf_personal,'data/format_data/egfr_sd_tophits.tsv'))
 write.table(egfr_gwas_outcome_sd_format, file = paste0(rdsf_personal,'data/format_data/egfr_sd_GWAS_tidy_outcome.csv'),
             sep= ',', row.names = F,col.names= T)
 
