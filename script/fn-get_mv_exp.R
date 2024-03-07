@@ -12,7 +12,7 @@ get_mv_exposures <- function(tophits_list, full_gwas_list) {
   # clump exposures: this will produce a list of instruments (shared and unique) of the given exposures
   temp <- exposures
   temp$id.exposure <- 1
-  temp <- ld_clump_local(temp,5e-8)
+  temp <- ld_clump_local(temp)
   exposures <- filter(exposures, SNP %in% temp$SNP)
   
   # subset full gwas summary stats of each exposure to the list of SNPs (instruments) produced above

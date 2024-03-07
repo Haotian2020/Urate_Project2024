@@ -1,5 +1,5 @@
 
-ld_clump_local =  function(out_dat, threshold) {
+ld_clump_local =  function(out_dat, threshold = 5e-8) {
   
   if("pval.outcome" %in% colnames(out_dat)){
     tmp = subset(out_dat, pval.outcome < threshold) %>% TwoSampleMR::convert_outcome_to_exposure()
