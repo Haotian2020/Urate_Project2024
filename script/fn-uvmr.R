@@ -35,7 +35,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
     print("Reading from IEU open GWAS database")
     out <- TwoSampleMR::extract_outcome_data(snps = exp$SNP,
                                              outcomes = outcome,
-                                             proxies = TRUE,
+                                             proxies = FALSE,
                                              access_token = NULL)
     
   }
@@ -52,6 +52,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
     
     set.seed(123)
     mr <- suppressMessages(TwoSampleMR::mr(dat = dat))
+    mr$type = "Ori"
     
     ## Calculate Isq -----------------------------------------------------------
     
@@ -59,18 +60,18 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
     
     isq <- Isq(dat_isq$beta.exposure,dat_isq$se.exposure)
     
-    
-    
     # Perform Egger intercept test ---------------------------------------------
     
     print("Perform Egger intercept test")
     plei <- TwoSampleMR::mr_pleiotropy_test(dat)
     plei$Isq <- isq
+    plei$type = "Ori"
     
     # Perform heterogeneity test -----------------------------------------------
     
     print("Perform heterogeneity test")
     hetero <- TwoSampleMR::mr_heterogeneity(dat)
+    hetero$type = "Ori"
     
     # Perform steiger filtering ------------------------------------------------
     
@@ -105,11 +106,21 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
       dat <- steiger_filtering(dat)
       print(summary(dat$steiger_dir))
     }
+    
+    dat_isq_sf <- exp[exp$SNP %in% dat[dat$mr_keep==TRUE&dat$steiger_dir==TRUE,]$SNP,]
+    
+    isq_sf <- Isq(dat_isq_sf$beta.exposure,dat_isq_sf$se.exposure)
+    
     mr_sf = mr(subset(dat, steiger_dir))
+    mr_sf$type = "Steiger"
     
     mr_hetero_sf <- mr_heterogeneity(subset(dat, steiger_dir))
+    mr_hetero_sf$type = "Steiger"
     
     mr_pleio_sf <- mr_pleiotropy_test(subset(dat, steiger_dir))
+    mr_pleio_sf$Isq <- isq_sf
+    mr_pleio_sf$type = "Steiger"
+    
   } else {
     
     mr <- NULL
@@ -117,7 +128,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
     
   }
   
-  r <- list(mr, plei, hetero, mr_sf, mr_hetero_sf, mr_pleio_sf)
+  r <- list(mr, plei, hetero, mr_sf, mr_pleio_sf,mr_hetero_sf)
   
   return(r)
 }
