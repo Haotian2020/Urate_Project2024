@@ -70,7 +70,7 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
     mydata$exposure[i] <- NA
     mydata$nsnp[i] <- NA
   }
-  
+  mydata[-1, "exposure"] <- NA
   mydata = data.frame(mydata)
   
   tabletext <- cbind(
