@@ -25,6 +25,9 @@ for(i in risk_factors){
   all_instruments = rbind(all_instruments,tmp)
 }
 
+egfr2016_exp = extract_instruments("ieu-a-1105",access_token = NULL) %>% select(all_of(col_order))
+all_instruments = rbind(all_instruments,egfr2016_exp)
+
 all_instruments = F_statistic(all_instruments)
 
 data.table::fwrite(all_instruments, paste0(rdsf_personal,"data/format_data/all_instruments.csv"))
