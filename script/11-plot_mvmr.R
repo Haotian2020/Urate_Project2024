@@ -22,9 +22,9 @@ mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (C
 
 mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen)") %>% subset(method == "Inverse variance weighted"),
                res %>% subset(exposure == "DBP (UKB)" & outcome == "eGFR (CKDGen)") %>% subset(method == "Inverse variance weighted"),
-               exurate_sbp_egfr_mvmr,fill = T)
+               exurate_dbp_egfr_mvmr,fill = T)
 
-mydata = mydata %>% select(-c("Isq")) %>% generate_odds_ratios()
+mydata = mydata %>% generate_odds_ratios()
 
 mydata$beta <-
   format(round(mydata$b, digits = 3),
@@ -133,11 +133,11 @@ uratedbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/uratedbp_egfr_mvmr.csv"
 
 # here we need to compare with the results from sample-split method ------------
 
-urate_egfr_mr_meta = format_meta(uvmr("urate_clean_s1","egfr_sd")[[1]],uvmr("urate_clean_s2","egfr_sd")[[1]])
+urate_egfr_mr_meta = format_meta(uvmr("Urate (UKB s1)","egfr_sd")[[1]],uvmr("Urate (UKB s2)","egfr_sd")[[1]])
 
-sbp_egfr_mr_meta = format_meta(uvmr("sbp_clean_s1","egfr_sd")[[1]],uvmr("sbp_clean_s2","egfr_sd")[[1]])
+sbp_egfr_mr_meta = format_meta(uvmr("SBP (UKB s1)","egfr_sd")[[1]],uvmr("SBP (UKB s2)","egfr_sd")[[1]])
 
-dbp_egfr_mr_meta = format_meta(uvmr("dbp_clean_s1","egfr_sd")[[1]],uvmr("dbp_clean_s2","egfr_sd")[[1]])
+dbp_egfr_mr_meta = format_meta(uvmr("DBP (UKB s1)","egfr_sd")[[1]],uvmr("DBP (UKB s2)","egfr_sd")[[1]])
 
 df <- rbind(sbp_egfr_mr_meta, dbp_egfr_mr_meta, urate_egfr_mr_meta)%>% subset(method == "Inverse variance weighted")
 
@@ -145,6 +145,7 @@ df$outcome = "eGFR (CKDGen)"
 df$exposure[1] = "SBP (UKB Meta)"
 df$exposure[2] = "DBP (UKB Meta)"
 df$exposure[3] = "Urate (UKB Meta)"
+
 
 mydata = rbind(df %>% subset(exposure == "Urate (UKB Meta)"),
                df %>% subset(exposure == "SBP (UKB Meta)"),

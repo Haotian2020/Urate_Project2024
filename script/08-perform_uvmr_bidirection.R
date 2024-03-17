@@ -19,10 +19,9 @@ col_order = c("SNP","exposure","effect_allele.exposure","other_allele.exposure",
 
 for(i in risk_factors){
   print(i)
-  tmp <- read_tsv(paste0(rdsf_personal,"/data/format_data/",i,"_tophits.tsv")) %>% data.frame()
+  suppressMessages(tmp <- read_tsv(paste0(rdsf_personal,"/data/format_data/",i,"_tophits.tsv")) %>% data.frame())
   tmp <- tmp[,col_order]
-  print(head(tmp))
-
+  print(nrow(tmp))
   all_instruments = rbind(all_instruments,tmp)
 }
 
@@ -54,7 +53,7 @@ hetero_sf_bin <- NULL
 # urate UKB and eGFR CKDGen
 
 exposure_name <- c("Urate (CKDGen)", "eGFR (CKDGen)", "Urate (UKB)", "SBP (UKB)","DBP (UKB)")
-outcome_name <- c("egfr_sd", "exurate_sd", "sbp_clean", "dbp_clean","urate_clean")
+outcome_name <- c("egfr_sd", "exurate_sd", "sbp_clean", "dbp_clean","urate_clean","")
 
 all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
 
@@ -113,3 +112,46 @@ write.table(plei_sf_bin,file = paste0(rdsf_personal,"results/plei_sf_bin.csv"),
 
 write.table(hetero_sf_bin,file = paste0(rdsf_personal,"results/hetero_sf_bin.csv"),
             sep= ',', row.names = F,col.names= T)
+
+# additional analyses ----------------------------------------------------------
+# bp on ieu-a-1105 -------------------------------------------------------------
+
+df1 = uvmr("SBP (UKB)","ieu-a-1105", outcome_sd = 0.24)
+
+df2 = uvmr("DBP (UKB)","ieu-a-1105", outcome_sd = 0.24)
+
+df3 = uvmr("ieu-a-1105", "sbp_clean", exposure_sd = 0.24)
+
+df4 = uvmr("ieu-a-1105","dbp_clean", exposure_sd = 0.24)
+
+sup_results = rbind(df1[[1]],df2[[1]],df3[[1]],df4[[1]])
+
+sup_pleio = rbind(df1[[2]],df2[[2]],df3[[2]],df4[[2]])
+
+sup_hetero = rbind(df1[[3]],df2[[3]],df3[[3]],df4[[3]])
+
+sup_sf_results = rbind(df1[[4]],df2[[4]],df3[[4]],df4[[4]])
+
+sup_sf_pleio = rbind(df1[[5]],df2[[5]],df3[[5]],df4[[5]])
+
+sup_sf_hetero = rbind(df1[[6]],df2[[6]],df3[[6]],df4[[6]])
+
+write.table(sup_results,file = paste0(rdsf_personal,"results/sup_results.csv"),
+            sep= ',', row.names = F,col.names= T)
+
+write.table(sup_pleio,file = paste0(rdsf_personal,"results/sup_pleio.csv"),
+            sep= ',', row.names = F,col.names= T)
+
+write.table(sup_hetero,file = paste0(rdsf_personal,"results/sup_hetero.csv"),
+            sep= ',', row.names = F,col.names= T)
+
+write.table(sup_sf_results,file = paste0(rdsf_personal,"results/sup_sf_results.csv"),
+            sep= ',', row.names = F,col.names= T)
+
+write.table(sup_sf_pleio,file = paste0(rdsf_personal,"results/sup_sf_pleio.csv"),
+            sep= ',', row.names = F,col.names= T)
+
+write.table(sup_sf_hetero,file = paste0(rdsf_personal,"results/sup_sf_hetero.csv"),
+            sep= ',', row.names = F,col.names= T)
+
+
