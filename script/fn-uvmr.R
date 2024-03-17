@@ -1,18 +1,24 @@
 # perform uvmr
 # source: https://github.com/venexia/T2DMediationMR/blob/master/code/fn-uvmr.R
 
-uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
+source("fn-uvmr_scatter.R")
+
+uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1, outcome_sd = 1, plot = FALSE) {
   
   # Load instruments -----------------------------------------------------------
   
   instruments <- data.table::fread(paste0(rdsf_personal,"data/format_data/all_instruments.csv"), data.table = FALSE)
   
   ## Create exposure dataset ---------------------------------------------------
-  
+  if(exposure %in% instruments$exposure){
   print(paste0("Reading ",exposure," from all instruments file"))
   tmp_exp <- exposure
   exp <- subset(instruments,exposure == tmp_exp)
   unique(exp$exposure)
+  }else{
+    exp <- extract_instruments(exposure,access_token = NULL)
+  }
+  
   # Extract outcome data -------------------------------------------------------
   
   if (outcome %in% c("egfr_sd","exurate_sd","urate_clean","sbp_clean","dbp_clean","stroke","early50","late60","hpt")) {
@@ -37,7 +43,6 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
                                              outcomes = outcome,
                                              proxies = FALSE,
                                              access_token = NULL)
-    
   }
   
   if (!is.null(out)) {
@@ -48,11 +53,23 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL) {
     dat <- suppressMessages(TwoSampleMR::harmonise_data(exposure_dat = exp, 
                                                         outcome_dat = out,action = 2))
     
+    ## SD unit tranformation for harmonised data -------------------------------
+    
+    dat$beta.exposure = dat$beta.exposure/exposure_sd
+    dat$se.exposure = dat$se.exposure/exposure_sd
+    
+    dat$beta.outcome = dat$beta.outcome/outcome_sd
+    dat$se.outcome = dat$se.outcome/outcome_sd
+    
     ## Perform MR --------------------------------------------------------------
     
     set.seed(123)
-    mr <- suppressMessages(TwoSampleMR::mr(dat = dat))
+    mr <- suppressMessages(TwoSampleMR::mr(dat = dat) %>% split_outcome() %>% split_exposure())
     mr$type = "Ori"
+    
+    if(plot == T) {
+      save_scatter_plot(dat,mr)
+    }
     
     ## Calculate Isq -----------------------------------------------------------
     

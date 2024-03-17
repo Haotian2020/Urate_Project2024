@@ -1,3 +1,4 @@
+# doing LD clump in local
 
 ld_clump_local =  function(out_dat, threshold = 5e-8) {
   

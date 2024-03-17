@@ -54,7 +54,8 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
                  "Urate (UKB)",
                  "SBP (UKB)",
                  "DBP (UKB)",
-                 "eGFR (CKDGen)")
+                 "eGFR (CKDGen)",
+                 "Serum creatinine (eGFRcrea)")
     )
   
   sorted_index <- order(mydata$outcome,mydata$method)
