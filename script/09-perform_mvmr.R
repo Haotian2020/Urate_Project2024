@@ -74,8 +74,3 @@ write.table(uratesbp_egfr_mvmr, file = paste0(rdsf_personal,"results/uratesbp_eg
 write.table(uratedbp_egfr_mvmr, file = paste0(rdsf_personal,"results/uratedbp_egfr_mvmr.csv"),
             sep= ',', row.names = F,col.names= T)
 
-# addtional test with bmi ------------------------------------------------------
-
-mvmr_sbp_bmi_egfr = MVMR_function("sbp_clean","ieu-a-2","egfr_sd")
-
-mvmr_dbp_bmi_egfr = MVMR_function("dbp_clean","ieu-a-2","egfr_sd")
