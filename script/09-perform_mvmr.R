@@ -73,4 +73,3 @@ write.table(uratesbp_egfr_mvmr, file = paste0(rdsf_personal,"results/uratesbp_eg
             sep= ',', row.names = F,col.names= T)
 write.table(uratedbp_egfr_mvmr, file = paste0(rdsf_personal,"results/uratedbp_egfr_mvmr.csv"),
             sep= ',', row.names = F,col.names= T)
-

@@ -156,5 +156,3 @@ write.table(sup_sf_pleio,file = paste0(rdsf_personal,"results/sup_sf_pleio.csv")
 
 write.table(sup_sf_hetero,file = paste0(rdsf_personal,"results/sup_sf_hetero.csv"),
             sep= ',', row.names = F,col.names= T)
-
-
