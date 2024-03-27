@@ -11,10 +11,15 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
   
   ## Create exposure dataset ---------------------------------------------------
   if(exposure %in% instruments$exposure){
+    
   print(paste0("Reading ",exposure," from all instruments file"))
+    
   tmp_exp <- exposure
+  
   exp <- subset(instruments,exposure == tmp_exp)
+  
   unique(exp$exposure)
+  
   }else{
     exp <- extract_instruments(exposure,access_token = NULL)
   }

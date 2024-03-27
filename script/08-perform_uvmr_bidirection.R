@@ -25,24 +25,12 @@ for(i in risk_factors){
   all_instruments = rbind(all_instruments,tmp)
 }
 
-egfr2016_exp = extract_instruments("ieu-a-1105",access_token = NULL) %>% select(all_of(col_order))
+egfr2016_exp = extract_instruments("ieu-a-1105",access_token = NULL) %>% dplyr::select(all_of(col_order))
 all_instruments = rbind(all_instruments,egfr2016_exp)
 
 all_instruments = F_statistic(all_instruments)
 
 data.table::fwrite(all_instruments, paste0(rdsf_personal,"data/format_data/all_instruments.csv"))
-
-# Create empty results datasets ------------------------------------------------
-
-results_bin <- NULL
-plei_bin <- NULL
-hetero_bin <- NULL 
-
-# for steiger filtering results ------------------------------------------------
-
-results_sf_bin <- NULL
-plei_sf_bin <- NULL
-hetero_sf_bin <- NULL
 
 # exposure name is the exposure column in all instruments
 # outcome name is the saved files from formatted GWAS file names
@@ -55,8 +43,8 @@ hetero_sf_bin <- NULL
 # Sensitivity analyses between
 # urate UKB and eGFR CKDGen
 
-exposure_name <- c("Urate (CKDGen)", "eGFR (CKDGen)", "Urate (UKB)", "SBP (UKB)","DBP (UKB)")
-outcome_name <- c("egfr_sd", "exurate_sd", "sbp_clean", "dbp_clean","urate_clean","")
+exposure_name <- c("Urate (CKDGen)", "eGFR (CKDGen2019)", "Urate (UKB)", "SBP (UKB)","DBP (UKB)")
+outcome_name <- c("egfr_sd", "exurate_sd", "sbp_clean", "dbp_clean","urate_clean")
 
 all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
 
@@ -76,15 +64,30 @@ check_overlap <- function(str1, str2, substrings) {
 
 substrings <- c("sbp", "dbp", "urate", "egfr")
 
+# Create empty results datasets ------------------------------------------------
+
+results_bin <- NULL
+plei_bin <- NULL
+hetero_bin <- NULL 
+
+# for steiger filtering results ------------------------------------------------
+
+results_sf_bin <- NULL
+plei_sf_bin <- NULL
+hetero_sf_bin <- NULL
+
 # Do bidirectional MR and save mr, pleio and hetero results --------------------
 
 for (i in 1:nrow(filtered_combinations)) {
   exposure = filtered_combinations[i,"exposure"]
   outcome =  filtered_combinations[i,"outcome"]
-  print(paste0("exposure is ", exposure))
-  print(paste0("outcome is ",outcome))
+  
+  print(paste0("Exposure is ", exposure,"; Outcome is ",outcome))
+  
     if (!check_overlap(exposure, outcome, substrings)) {
+      
       print(paste0("Performing MR for ",exposure, " - ", outcome))
+      
       tmp <- uvmr(exposure,outcome)
       results_bin <- rbind(results_bin,tmp[[1]])
       plei_bin <- rbind(plei_bin,tmp[[2]])
@@ -116,8 +119,13 @@ write.table(plei_sf_bin,file = paste0(rdsf_personal,"results/plei_sf_bin.csv"),
 write.table(hetero_sf_bin,file = paste0(rdsf_personal,"results/hetero_sf_bin.csv"),
             sep= ',', row.names = F,col.names= T)
 
-# additional analyses ----------------------------------------------------------
+# additional analyses between bp and egfr 2016----------------------------------
 # bp on ieu-a-1105 -------------------------------------------------------------
+
+exposure_name <- c("SBP (UKB)","DBP (UKB)","ieu-a-1105")
+outcome_name <- c("sbp_clean", "dbp_clean","ieu-a-1105")
+
+all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
 
 df1 = uvmr("SBP (UKB)","ieu-a-1105", outcome_sd = 0.24)
 

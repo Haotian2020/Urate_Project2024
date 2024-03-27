@@ -17,7 +17,7 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
   # remove id.exposure and id.outcome columns ------------------------------------
   
   mydata  <- data.frame(dat) %>%
-    select(-c("id.exposure", "id.outcome")) %>%
+    dplyr::select(-c("id.exposure", "id.outcome")) %>%
     subset(exposure %in% exp & outcome %in% out) %>%
     generate_odds_ratios()
   
@@ -54,7 +54,7 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
                  "Urate (UKB)",
                  "SBP (UKB)",
                  "DBP (UKB)",
-                 "eGFR (CKDGen)",
+                 "eGFR (CKDGen2019)",
                  "Serum creatinine (eGFRcrea)")
     )
   

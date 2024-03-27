@@ -8,7 +8,7 @@ for(i in c("SBP (UKB)","DBP (UKB)")){
   
   egfr_out1 <- read_outcome_data(
     snps = exp$SNP,
-    filename = paste0(rdsf_personal,"data/format_data/egfr_sd_GWAS_tidy_outcome.csv"),
+    filename = paste0(rdsf_personal,"data/format_data/egfr_GWAS_tidy_outcome.csv"),
     sep = ",",
     phenotype_col = "outcome",
     snp_col = "SNP",
@@ -21,11 +21,11 @@ for(i in c("SBP (UKB)","DBP (UKB)")){
     samplesize_col = "samplesize.outcome"
   ) %>% convert_outcome_to_exposure()
   
-  egfr_out1$exposure = "SD unit of log(eGFR) (Wuttke"
+  egfr_out1$exposure = "log(eGFR)"
   egfr_out2 = extract_outcome_data(snps = egfr_out1$SNP,outcomes = "ieu-a-1105",proxies = F, access_token = NULL)
-  egfr_out2$outcome = "SD unit of log(eGFR) (Pattaro"
-  egfr_out2$beta.outcome = egfr_out2$beta.outcome/0.24
-  egfr_out2$se.outcome = egfr_out2$se.outcome/0.24
+  egfr_out2$outcome = "log(eGFR)"
+  # egfr_out2$beta.outcome = egfr_out2$beta.outcome/0.24
+  # egfr_out2$se.outcome = egfr_out2$se.outcome/0.24
   egfr_har = harmonise_data(exposure_dat = egfr_out1,outcome_dat = egfr_out2,action = 2)
   
   df <- egfr_har[,c("SNP","beta.exposure","se.exposure","exposure","beta.outcome","se.outcome","outcome")]
@@ -39,12 +39,12 @@ for(i in c("SBP (UKB)","DBP (UKB)")){
     ggplot2::xlim(min(df$beta.exposure - df$se.exposure,df$beta.outcome - df$se.outcome),max(df$beta.outcome + df$se.outcome,df$beta.exposure + df$se.exposure)) + 
     ggplot2::ylim(min(min(df$beta.exposure - df$se.exposure,df$beta.outcome - df$se.outcome)),max(df$beta.outcome + df$se.outcome,df$beta.exposure + df$se.exposure)) +
     ggplot2::scale_colour_manual(values=c("black", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928")) +
-    ggplot2::labs(x = bquote(.(i)~"SNP effect on"~.(df$exposure)~italic("et al.")~" 2019)"),
-                  y = bquote(.(i)~"SNP effect on"~.(df$outcome)~italic("et al.")~" 2016)"))  +
+    ggplot2::labs(x = paste0("SNP effect on ", unique(egfr_har$exposure), " (CKDGen2019)"),
+                  y = paste0("SNP effect on ", unique(egfr_har$outcome), " (CKDGen2016)"))  +
     ggplot2::theme(legend.position="top", legend.direction="vertical") +
     ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
 
-  pdf(paste0(rdsf_personal,"results/",i," on 2 egfr scatter sd.pdf"),width = 6, height = 6)
+  pdf(paste0(rdsf_personal,"results/",i," on 2 egfr scatter.pdf"),width = 6, height = 6)
   print(p)
   dev.off()
 }

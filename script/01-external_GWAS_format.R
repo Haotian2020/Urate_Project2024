@@ -63,7 +63,8 @@ egfr_gwas_outcome_format = format_data(egfr_gwas_outcome,
                                        samplesize_col = "n_total_sum",
                                        chr_col = "Chr",
                                        pos_col = "Pos_b37")
-egfr_gwas_outcome_format$outcome = "eGFR (CKDGen)"
+
+egfr_gwas_outcome_format$outcome = "eGFR (CKDGen2019)"
 
 # Transform to SD unit ---------------------------------------------------------
 egfr_gwas_outcome_sd_format = egfr_gwas_outcome_format

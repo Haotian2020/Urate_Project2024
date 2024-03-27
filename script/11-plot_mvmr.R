@@ -1,5 +1,9 @@
+source("format_meta.R")
+
 # urate ckdgen + bp ukb on egfr ckdgen -----------------------------------------
 # compare with urate ckdgen on egfr ckdgen and bp ukb on egfr ckdgen -----------
+
+# Load data --------------------------------------------------------------------
 
 exurate_sbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/exurate_sbp_egfr_mvmr.csv"))
 
@@ -7,21 +11,24 @@ exurate_dbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/exurate_dbp_egfr_mvm
 
 res = fread(paste0(paste0(rdsf_personal,"results/results_bin.csv")))
 
+# format results ---------------------------------------------------------------
+
 replacement_rules <- c("urate_clean" = "Urate (UKB)", "sbp_clean" = "SBP (UKB)", "dbp_clean" = "DBP (UKB)", "Urate CKDGen" = "Urate (CKDGen)",
-                       "eGFR CKDGen" = "eGFR (CKDGen)")
+                       "eGFR (CKDGen)" = "eGFR (CKDGen2019)")
 
 for (pattern in names(replacement_rules)) {
   res$exposure <- sub(pattern, replacement_rules[pattern], res$exposure)
   res$outcome <- sub(pattern, replacement_rules[pattern], res$outcome)
 }
 
+# prepare dataset for figures --------------------------------------------------
 
-mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen)") %>% subset(method == "Inverse variance weighted"),
-               res %>% subset(exposure == "SBP (UKB)" & outcome == "eGFR (CKDGen)") %>% subset(method == "Inverse variance weighted"),
+mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
+               res %>% subset(exposure == "SBP (UKB)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
                exurate_sbp_egfr_mvmr,fill = T)
 
-mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen)") %>% subset(method == "Inverse variance weighted"),
-               res %>% subset(exposure == "DBP (UKB)" & outcome == "eGFR (CKDGen)") %>% subset(method == "Inverse variance weighted"),
+mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
+               res %>% subset(exposure == "DBP (UKB)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
                exurate_dbp_egfr_mvmr,fill = T)
 
 mydata = mydata %>% generate_odds_ratios()
@@ -127,6 +134,8 @@ dev.off()
 # urate ukb  + bp ukb (sample split method) --> egfr ckdgen --------------------
 # compare with urate ukb on egfr ckdgen and bp ukb on egfr ckdgen --------------
 
+# Load data --------------------------------------------------------------------
+
 uratesbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/uratesbp_egfr_mvmr.csv"))
 
 uratedbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/uratedbp_egfr_mvmr.csv"))
@@ -139,9 +148,11 @@ sbp_egfr_mr_meta = format_meta(uvmr("SBP (UKB s1)","egfr_sd")[[1]],uvmr("SBP (UK
 
 dbp_egfr_mr_meta = format_meta(uvmr("DBP (UKB s1)","egfr_sd")[[1]],uvmr("DBP (UKB s2)","egfr_sd")[[1]])
 
+# format results ---------------------------------------------------------------
+
 df <- rbind(sbp_egfr_mr_meta, dbp_egfr_mr_meta, urate_egfr_mr_meta)%>% subset(method == "Inverse variance weighted")
 
-df$outcome = "eGFR (CKDGen)"
+df$outcome = "eGFR (CKDGen2019)"
 df$exposure[1] = "SBP (UKB Meta)"
 df$exposure[2] = "DBP (UKB Meta)"
 df$exposure[3] = "Urate (UKB Meta)"
@@ -177,7 +188,7 @@ mydata$exposure <-
   factor(
     mydata$exposure,
     levels = c(
-      "Urate (UKB Meta)","SBP (UKB Meta)","DBP (UKB Meta)","eGFR (CKDGen)"))
+      "Urate (UKB Meta)","SBP (UKB Meta)","DBP (UKB Meta)","eGFR (CKDGen2019)"))
 
 sorted_index <- order(mydata$exposure,mydata$method)
 mydata = mydata[sorted_index,]
@@ -252,5 +263,3 @@ plot.new()
 print(p)
 mtext("B)",side = 3,line = 2,adj = 0,cex = 1.5,padj = 0)
 dev.off()
-
-

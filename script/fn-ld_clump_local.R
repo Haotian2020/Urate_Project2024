@@ -20,7 +20,7 @@ ld_clump_local =  function(out_dat, threshold = 5e-8) {
   )
   
   ins = subset(tmp,SNP%in%snps$rsid)
-  ss = subset(out_dat,SNP%in%snps$rsid) %>% select(c("SNP",starts_with("chr"), starts_with("pos"), starts_with("samplesize")))
+  ss = subset(out_dat,SNP%in%snps$rsid) %>% dplyr::select(c("SNP",starts_with("chr"), starts_with("pos"), starts_with("samplesize")))
   colnames(ss) = c("SNP","chr.exposure","pos.exposure","samplesize.exposure")
   
   ins = merge(ins,ss,by ="SNP")
