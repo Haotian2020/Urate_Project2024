@@ -1,3 +1,5 @@
+# function for calculating MVMR instruments strength (conditional F)
+
 mvmr_instruments_strength <- function(exp1,exp2,out1){
   
   # Load instruments -----------------------------------------------------------

@@ -91,6 +91,7 @@ dat <- dat[,c("exposure","outcome","method",	"nsnp",	"b", "se", "pval")]
 dat <- apply_custom_order(dat,"risk_factor_order")
 
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee4.csv"))
+# Script for making the supplementary tables
 
 # bidirectional MR sheet (Steiger) ---------------------------------------------
 

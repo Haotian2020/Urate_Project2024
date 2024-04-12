@@ -1,6 +1,7 @@
-# do positive control for the GWAS conducted by myself
+# Script for doing positive control MR analyses for the outcome GWAS conducted in UKB
 # urate on gout
 # bp on stroke
+
 source("fn-binaryplot.R")
 
 # read instruments files -------------------------------------------------------

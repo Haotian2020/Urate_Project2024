@@ -2,6 +2,8 @@
 
 df <- data.table::fread("./data/icd10withtime_extract.csv")
 
+# Script for UKB GWAS pipeline input for binary traits
+
 # read link file ---------------------------------------------------------------
 
 link <- data.table::fread("./data/linker_app15825_withexcl.csv")

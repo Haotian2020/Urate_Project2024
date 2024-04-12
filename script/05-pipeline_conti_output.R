@@ -1,3 +1,5 @@
+# Script for formatting GWAS summary level from UKB pipeline output of continuous traits
+
 source("fn-ld_clump_local.R")
 source("fn-ukbgwas-conti-output-format.R")
 

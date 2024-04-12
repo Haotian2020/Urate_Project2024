@@ -1,3 +1,5 @@
+# function for plotting binary outcomes
+
 drawbinaryformat= function(dat){
   
   dat = dat %>% select(-c("id.exposure","id.outcome")) %>% split_outcome() %>%  generate_odds_ratios()

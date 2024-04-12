@@ -1,4 +1,4 @@
-# Function to calculate I squared statistic
+# Function for calculating I squared statistic
 # Source: https://github.com/MRCIEU/Health-and-Wellbeing-MR/blob/master/Two-sample%20MR%20Base%20script.R
 
 Isq = function(y,s){

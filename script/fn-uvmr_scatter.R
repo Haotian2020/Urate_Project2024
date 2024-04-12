@@ -1,4 +1,4 @@
-# plot scatter plot for univariable MR results
+# function for plotting scatter plot for UVMR results
 
 save_scatter_plot = function(dat,res){
   p1 <- mr_scatter_plot(res, dat)

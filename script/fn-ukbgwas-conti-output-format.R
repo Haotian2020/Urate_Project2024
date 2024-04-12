@@ -1,3 +1,5 @@
+# function for formatting UKB GWAS summary level data for continuous trait
+
 ContiOutputFormatFunction = function(dat_name,outcome_name,mean,sd,samplesize){
   print("reading data from rdsf")
   dat <-vroom(paste0(rdsf_personal,"data/GWAS_imputed/",dat_name))

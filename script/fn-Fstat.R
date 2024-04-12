@@ -1,4 +1,4 @@
-# function to calculate F-stat
+# function for calculating F-stat
 
 F_statistic = function(exposure_data){
   exposure_data$R = get_r_from_bsen(exposure_data$beta.exposure,exposure_data$se.exposure,exposure_data$samplesize.exposure)

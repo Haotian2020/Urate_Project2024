@@ -1,5 +1,7 @@
+# Script for plotting UVMR figures
+
 source(fn-uvmrplot.R)
-# forestplot for all mr method 
+
 # reading results and format data ----------------------------------------------
 
 res = fread(paste0(rdsf_personal,"results/results_bin.csv"))

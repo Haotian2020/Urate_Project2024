@@ -1,4 +1,4 @@
-# perform uvmr
+# function for performing UVMR
 # source: https://github.com/venexia/T2DMediationMR/blob/master/code/fn-uvmr.R
 
 source("fn-uvmr_scatter.R")

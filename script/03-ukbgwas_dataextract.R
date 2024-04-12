@@ -1,3 +1,6 @@
+# Scripts for extracting data from UKB, including ID, sex, age, genotyping chip,
+# BP, urate and ICD10
+
 # read and write urate, sbp and dbp data from ukb ------------------------------
 
 vars <- c("eid","31-0.0","21022-0.0","4080-0.0","4079-0.0", "6177-0.0",# ID, sex, age, SBP, DBP,

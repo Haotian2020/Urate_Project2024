@@ -1,3 +1,6 @@
+# function for formatting meta-analysis from two MR results
+# e.g. results from split-sample method
+
 format_meta <- function(mr1, mr2) {
   mr_bin = c()
   for(each in mr1$method){

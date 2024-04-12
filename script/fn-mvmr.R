@@ -1,4 +1,4 @@
-# function for mvmr
+# function for performing mvmr
 
 getwd()
 ao <- available_outcomes(access_token = NULL)
@@ -88,8 +88,8 @@ MVMR_function  <- function(exp1,exp2,outcome1){
   
   # perform mvmr ---------------------------------------------------------------
   
-  mvdat <- mv_harmonise_data(exposure_dat, outcome_dat)
-  res_bmis <- mv_multiple(mvdat)
+  mvdat <- TwoSampleMR::mv_harmonise_data(exposure_dat, outcome_dat)
+  res_bmis <- TwoSampleMR::mv_multiple(mvdat)
   return(res_bmis)
 }
 

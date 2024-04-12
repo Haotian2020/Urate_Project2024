@@ -1,4 +1,4 @@
-# perform MR of urate on early, late -onset and overall hypertension
+# Script for performing MR of urate on early, late -onset and overall hypertension
 
 source("fn-binaryplot.R")
 

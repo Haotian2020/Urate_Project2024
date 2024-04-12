@@ -1,4 +1,23 @@
+# Script for main packages needed in this project
+
 getwd()
+
+# install.packages("remotes")
+library(remotes)
+
+# remotes::install_github("MRCIEU/TwoSampleMR",force = T)
+library(TwoSampleMR)
+
+# remotes::install_github("mrcieu/ieugwasr",force = T)
+library(ieugwasr)
+
+# install_github("WSpiller/MVMR", build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
+library(MVMR)
+
+library(forestplot)
+
+# other package you might need
+
 library(readr)
 library(vroom)
 library(tidyr)
@@ -6,44 +25,8 @@ library(tibble)
 library(tidyverse)
 library(lubridate)
 library(dplyr)
-library(readxl)
 library(data.table)
 library(reshape)
-library(RCurl)
-library(rvest)
-library(openxlsx)
-library(vcfR)
 library(stringr)
-library(foreign)
-library(plyr)
-library(AER)
-library(bedr)
-library(reshape2)
-library(remotes)
 library(meta)
-library(forestplot)
-library(forestploter)
-library(ggplot2)
-library(forestplot)
 library(devtools)
-
-# remotes::install_github("MRCIEU/TwoSampleMR",force = T)
-library(TwoSampleMR)
-# remotes::install_github("mrcieu/ieugwasr",force = T)
-library(ieugwasr)
-# devtools::install_github("rondolab/MR-PRESSO", froce =T)
-library(MRPRESSO)
-# install_github("WSpiller/MVMR", build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
-library(MVMR)
-
-# BiocManager::install("biomaRt")
-# library(biomaRt)
-# library(BiocManager)
-# install.packages("devtools")
-# devtools::install_github("NightingaleHealth/ggforestplot")
-# library(ggforestplot)
-# library(ggpubr)
-# library(MRInstruments)
-# BiocManager::install("GenomicAlignments")
-# library(GenomicAlignments)
-# library(UniprotR)

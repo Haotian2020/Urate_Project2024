@@ -1,4 +1,4 @@
-# binary data cleaning function --------------------------------------------
+# function for formatting UKB GWAS summary level data for binary trait
 
 BinaryOutputFormatFunction = function(dat_name,outcome_name,Ncase,Ncontrol){
   print("reading data from rdsf")

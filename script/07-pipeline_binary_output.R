@@ -1,3 +1,5 @@
+# Script for formatting GWAS summary level from UKB pipeline output of binary traits
+
 source("fn-ukbgwas-binary-output-format.R")
 
 # Read and format output from gwas files ---------------------------------------

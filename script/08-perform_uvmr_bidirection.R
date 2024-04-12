@@ -1,3 +1,5 @@
+# Script for performing UVMR analyses
+
 source("code/specify_paths.R")
 source("fn-uvmr.R")
 source("fn-Isq.R")

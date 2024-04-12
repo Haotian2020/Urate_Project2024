@@ -1,4 +1,6 @@
-# use bp instruments to compare the SNP effects in two egfr gwas 
+# Script for using bp instruments to compare the SNP effects in two eGFR gwas
+
+# two eGFR gwas paper:
 # Wuttke, Li Y., Li M., Sieber, Feitosa, Gorski et al., 2019: eGFR, BUN and CKD associations; trans-ethnic and European American ancestry
 # Pattaro, Teumer, Gorski, Chu, Li, and Mijatovic et al., 2016: Genetic associations at 53 loci highlight cell types and biological pathways relevant for kidney function
 

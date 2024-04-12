@@ -1,3 +1,5 @@
+# Scripts for creating linker file in UKB European population and doing QC 
+
 source("specify_paths.R")
 getwd()
 `%notin%` <- Negate(`%in%`)

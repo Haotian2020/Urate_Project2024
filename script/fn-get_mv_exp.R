@@ -1,3 +1,5 @@
+# function for making MVMR instruments
+
 # Source: https://marinalearning.netlify.app/2021/03/22/setting-up-multivariable-mendelian-randomization-analysis/
 
 get_mv_exposures <- function(tophits_list, full_gwas_list) {

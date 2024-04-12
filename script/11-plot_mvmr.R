@@ -1,3 +1,5 @@
+# Script for plotting MVMR figures
+
 source("format_meta.R")
 
 # urate ckdgen + bp ukb on egfr ckdgen -----------------------------------------

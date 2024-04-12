@@ -1,3 +1,5 @@
+# Script for performing MVMR analyses
+
 source("fn-mvmr.R")
 source("fn-mvmr_meta.R")
 

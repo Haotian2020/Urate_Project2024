@@ -1,4 +1,4 @@
-# function for lines in the figures --------------------------------------------
+# function for lines in the figures
 
 generate_lines <- function(line_number) {
   lines <- list()
@@ -11,7 +11,7 @@ generate_lines <- function(line_number) {
   return(lines)
 }
 
-# function to plot mr results
+# function to plot UVMR results
 
 uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
   # remove id.exposure and id.outcome columns ------------------------------------

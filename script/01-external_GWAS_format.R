@@ -1,3 +1,5 @@
+# Scripts for formatting GWAS (no UKB) summary level data in MR analyses
+
 rm(list=ls())
 graphics.off()
 `%notin%` <- Negate(`%in%`)

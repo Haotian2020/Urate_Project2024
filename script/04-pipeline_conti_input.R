@@ -1,3 +1,5 @@
+# Script for UKB GWAS pipeline input for continuous traits
+
 source("fn-ukbgwas-continuous-clean.R")
 
 # read conti data --------------------------------------------------------------
