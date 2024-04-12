@@ -4,7 +4,14 @@ The contents of this repository relate to the manuscript 'Evaluating the causal 
 
 # Link to the manuscript
 
+Will copy it here once we submit to arxiv
+
 # Abstract
+
+Will copy it here once we submit
 
 # Correspondence
 Please send any correspondence to Haotian Tang (haotian.tang@bristol.ac.uk).
+
+# Script documentation
+
