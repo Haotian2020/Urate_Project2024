@@ -20,7 +20,7 @@ Each script within the script repo includes a documentation at the beginning tha
 Version of R: 
 4.2.2
 
-Main packages that need to be installed: 
+Main packages that need to be installed:\\
 TwoSampleMR https://github.com/MRCIEU/TwoSampleMR
 MVMR https://github.com/WSpiller/MVMR
 forestploter https://github.com/adayim/forestploter
