@@ -15,3 +15,12 @@ Please send any correspondence to Haotian Tang (haotian.tang@bristol.ac.uk).
 
 # Script documentation
 
+Each script within the script repo includes a documentation at the beginning that clarifies the purpose of the script.
+
+Version of R: 
+4.2.2
+
+Main packages that need to be installed: 
+TwoSampleMR https://github.com/MRCIEU/TwoSampleMR
+MVMR https://github.com/WSpiller/MVMR
+forestploter https://github.com/adayim/forestploter
