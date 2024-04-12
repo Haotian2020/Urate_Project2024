@@ -15,7 +15,7 @@ Please send any questions to Haotian Tang (haotian.tang@bristol.ac.uk).
 
 # Script documentation
 
-Each script within the script repo includes a documentation at the beginning that clarifies the purpose of the script.
+Each script within the script repo includes a documentation at the beginning that clarifies the purpose of the script. The numbers in each script name indicate the order in which the code should be run.
 
 Version of R: 
 
