@@ -17,14 +17,14 @@ Please send any questions to Haotian Tang (haotian.tang@bristol.ac.uk).
 
 Each script within the script repo includes a documentation at the beginning that clarifies the purpose of the script. The numbers in each script name indicate the order in which the code should be run.
 
-Version of R: 
+Version of R: 4.2.2
 
-4.2.2
-
-Main packages that need to be installed: 
+Main packages that need to be installed for running scripts: 
 
 [TwoSampleMR 0.5.11](https://github.com/MRCIEU/TwoSampleMR)
 
 [MVMR 0.4](https://github.com/WSpiller/MVMR)
+
+[ieugwasr 0.1.8](https://mrcieu.github.io/ieugwasr)
 
 [forestplot 3.1.3](https://github.com/gforge/forestplot)
