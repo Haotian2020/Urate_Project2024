@@ -1,6 +1,6 @@
 # read icd10 and birth file ----------------------------------------------------
 
-df <- data.table::fread("./data/icd10withtime_extract.csv")
+df <- data.table::fread(paste0(rdsf_personal,"data/GWAS_input/icd10withtime_extract.csv"))
 
 # Script for UKB GWAS pipeline input for binary traits
 

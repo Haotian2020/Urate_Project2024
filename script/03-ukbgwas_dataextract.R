@@ -6,7 +6,7 @@
 vars <- c("eid","31-0.0","21022-0.0","4080-0.0","4079-0.0", "6177-0.0",# ID, sex, age, SBP, DBP,
           "30880-0.0") # urate
 
-df <- fread(paste0(rdsf_path,"data.48733.csv"),
+df <- fread(paste0(rdsf_path,"data.48725.csv"),
             sep = ",", 
             header = TRUE, 
             select = vars,
@@ -18,7 +18,7 @@ data.table::fwrite(df,paste0(rdsf_personal,"data/conti_extract.csv"))
 
 vars <- c("eid","34-0.0","52-0.0")# year of birth, month of birth
 
-df_birth <- fread(paste0(rdsf_path,"data.48733.csv"),
+df_birth <- fread(paste0(rdsf_path,"data.48725.csv"),
                   sep = ",", 
                   header = TRUE, 
                   select = vars,
@@ -27,7 +27,7 @@ df_birth <- fread(paste0(rdsf_path,"data.48733.csv"),
 vars <- c(paste0("41270-0.",seq(0,225)), # ICD10 diagnoses
           paste0("41280-0.",seq(0,225))) # date of ICD10 diagnoses
 
-df_icd10 <- fread(paste0(rdsf_path,"data.48733.csv"),
+df_icd10 <- fread(paste0(rdsf_path,"data.48725.csv"),
                   sep = ",", 
                   header = TRUE, 
                   select = vars,
@@ -35,14 +35,14 @@ df_icd10 <- fread(paste0(rdsf_path,"data.48733.csv"),
 
 df_icd10time <- cbind(df_birth,df_icd10)
 
-data.table::fwrite(df_icd10time,paste0(rsdf_personal,"data/GWAS_input/icd10withtime_extract.csv"))
+data.table::fwrite(df_icd10time,paste0(rdsf_personal,"data/GWAS_input/icd10withtime_extract.csv"))
 
 # create covariates file ---------------------------------------------------------
 
 covs = fread(paste0(rdsf_personal,"data/data.covariates.bolt.txt"))
 
 vars = c("eid","31-0.0","21022-0.0")
-df_age <- fread(paste0(rdsf_path,"data.48733.csv"),
+df_age <- fread(paste0(rdsf_path,"data.48725.csv"),
                 sep = ",", 
                 header = TRUE, 
                 select = vars,
