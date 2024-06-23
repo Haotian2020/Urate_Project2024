@@ -1,4 +1,5 @@
 # function for performing mvmr
+# acknowledgment: https://marinalearning.netlify.app/2021/03/22/setting-up-multivariable-mendelian-randomization-analysis/
 
 getwd()
 ao <- available_outcomes(access_token = NULL)
