@@ -121,13 +121,13 @@ p
 
 # c(-0.3,-0.2,-0.1,0,0.1,0.2)
 dev.off()
-pdf(paste0(rdsf_personal,"results/exurate sbp ukb on egfr forestplot.pdf"),width = 18, height = 2.5)
+tiff(paste0(rdsf_personal,"results/exurate sbp ukb on egfr forestplot.tiff"),width = 18, height = 2.5, res = 300, units = "in")
 plot.new()
 print(p)
 mtext("A)",side = 3,line = 2,adj = 0,cex = 1.5,padj = 0)
 dev.off()
 
-pdf(paste0(rdsf_personal,"results/exurate dbp ukb on egfr forestplot.pdf"),width = 18, height = 2.5)
+tiff(paste0(rdsf_personal,"results/exurate dbp ukb on egfr forestplot.tiff"),width = 18, height = 2.5, res = 300, units = "in")
 plot.new()
 print(p)
 mtext("B)",side = 3,line = 2,adj = 0,cex = 1.5,padj = 0)
@@ -254,13 +254,13 @@ p
 
 # c(-0.3,-0.2,-0.1,0,0.1,0.2)
 dev.off()
-pdf(paste0(rdsf_personal,"results/urate meta sbp ukb on egfr forestplot.pdf"),width = 18, height = 2.5)
+tiff(paste0(rdsf_personal,"results/urate meta sbp ukb on egfr forestplot.tiff"),width = 18, height = 2.5, res = 300, units = "in")
 plot.new()
 print(p)
 mtext("A)",side = 3,line = 2,adj = 0,cex = 1.5,padj = -1)
 dev.off()
 
-pdf(paste0(rdsf_personal,"results/urate meta dbp ukb on egfr forestplot.pdf"),width = 18, height = 2.5)
+tiff(paste0(rdsf_personal,"results/urate meta dbp ukb on egfr forestplot.tiff"),width = 18, height = 2.5, res = 300, units = "in")
 plot.new()
 print(p)
 mtext("B)",side = 3,line = 2,adj = 0,cex = 1.5,padj = -1)

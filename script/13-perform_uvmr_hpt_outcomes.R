@@ -106,6 +106,6 @@ p <- forestplot(
 p
 
 dev.off()
-pdf(paste0(rdsf_personal,"results/exurate on all hpt forestplot.pdf"),width = 17, height = 5)
+tiff(paste0(rdsf_personal,"results/exurate on all hpt forestplot.tiff"),width = 17, height = 5, res = 300, units = "in")
 print(p)
 dev.off()

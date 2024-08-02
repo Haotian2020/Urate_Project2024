@@ -21,7 +21,7 @@ p = uvmr_plot(dat = res,
               x_ticks = c(-0.2,-0.15,-0.1,-0.05,0,0.05,0.15,0.2),
               intervals = c(-0.2,0.2))
 
-pdf(paste0(rdsf_personal,"results/exurate on each outcome forestplot.pdf"),width = 18, height = 5)
+tiff(paste0(rdsf_personal,"results/exurate on each outcome forestplot.tiff"),width = 18, height = 5, res = 300, units = "in")
 plot.new()
 mtext("A)",side = 3,line = 2,adj = 0, cex = 1.5,padj = 0)
 print(p)
@@ -37,7 +37,7 @@ p = uvmr_plot(dat = res,
 
 p
 
-pdf(paste0(rdsf_personal,"results/sbp on each outcome forestplot.pdf"),width = 18, height = 3.5)
+tiff(paste0(rdsf_personal,"results/sbp on each outcome forestplot.tiff"),width = 18, height = 3.5, res = 300, units = "in")
 plot.new()
 mtext("B)",side = 3,line = 2,adj = 0, cex = 1.5,padj = 0)
 print(p)
@@ -53,7 +53,7 @@ p = uvmr_plot(dat = res,
 
 p
 
-pdf(paste0(rdsf_personal,"results/dbp on each outcome forestplot.pdf"),width = 18, height = 3.5)
+tiff(paste0(rdsf_personal,"results/dbp on each outcome forestplot.tiff"),width = 18, height = 3.5, res = 300, units = "in")
 plot.new()
 mtext("C)",side = 3,line = 2,adj = 0, cex = 1.5,padj = 0)
 print(p)
@@ -69,7 +69,7 @@ p = uvmr_plot(dat = res,
 
 p
 
-pdf(paste0(rdsf_personal,"results/egfr on each outcome forestplot.pdf"),width = 18, height = 5)
+tiff(paste0(rdsf_personal,"results/egfr on each outcome forestplot.tiff"),width = 18, height = 5, res = 300, units = "in")
 plot.new()
 mtext("D)",side = 3,line = 2,adj = 0, cex = 1.5,padj = 0)
 print(p)
