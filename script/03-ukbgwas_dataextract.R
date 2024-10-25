@@ -3,11 +3,19 @@
 
 # read and write urate, sbp and dbp data from ukb ------------------------------
 
-vars <- c("eid","31-0.0","21022-0.0","4080-0.0","4079-0.0", "6177-0.0",# ID, sex, age, SBP, DBP,
-          "30880-0.0") # urate
+vars <- c(
+  "eid", # ID,
+  "31-0.0", # sex,
+  "21022-0.0", # age,
+  "4080-0.0", # SBP 1
+  "4080-0.1", # SBP 2
+  "4079-0.0", # DBP 1
+  "4079-0.1", # DBP 2
+  "30880-0.0" # urate 
+)
 
-df <- fread(paste0(rdsf_path,"data.48725.csv"),
-            sep = ",", 
+df <- fread(paste0(rdsf_path,"data.48733.csv"),
+            sep = ",",
             header = TRUE, 
             select = vars,
             data.table = FALSE)
