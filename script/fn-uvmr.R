@@ -21,12 +21,12 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
   unique(exp$exposure)
   
   }else{
-    exp <- extract_instruments(exposure,access_token = NULL)
+    exp <- extract_instruments(exposure)
   }
   
   # Extract outcome data -------------------------------------------------------
   
-  if (outcome %in% c("egfr_sd","exurate_sd","urate_clean","sbp_clean","dbp_clean","stroke","early50","late60","hpt","ckd")) {
+  if (outcome %in% c("egfr_sd","exurate_sd","urate","sbp","dbp", "pp", "stroke","early50","late60","hpt","ckd")) {
     
     print(paste0("Reading ",outcome," from local formatted data"))
     out <- TwoSampleMR::read_outcome_data(snps = exp$SNP,
@@ -46,8 +46,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
     print("Reading from IEU open GWAS database")
     out <- TwoSampleMR::extract_outcome_data(snps = exp$SNP,
                                              outcomes = outcome,
-                                             proxies = FALSE,
-                                             access_token = NULL)
+                                             proxies = FALSE)
   }
   
   if (!is.null(out)) {
