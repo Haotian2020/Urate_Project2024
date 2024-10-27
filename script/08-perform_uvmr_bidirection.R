@@ -6,10 +6,11 @@ source("fn-Isq.R")
 
 # prepare instruments files ----------------------------------------------------
 
-risk_factors <- c("egfr_sd","exurate_sd","urate_clean","sbp_clean","dbp_clean", # for main analyses
-                  "urate_clean_s1","urate_clean_s2", # the rest of instruments are for MVMR sensitivity analyses 
-                  "sbp_clean_s1","sbp_clean_s2",
-                  "dbp_clean_s1","dbp_clean_s2")
+risk_factors <- c("egfr_sd","exurate_sd","urate","sbp","dbp", "pp", # for main analyses
+                  "urate_s1","urate_s2", # the rest of instruments are for MVMR sensitivity analyses 
+                  "sbp_s1","sbp_s2",
+                  "dbp_s1","dbp_s2",
+                  "pp_s1","pp_s2")
 
 all_instruments <- data.frame()
 tmp <- NULL
@@ -27,8 +28,10 @@ for(i in risk_factors){
   all_instruments = rbind(all_instruments,tmp)
 }
 
-egfr2016_exp = extract_instruments("ieu-a-1105",access_token = NULL) %>% dplyr::select(all_of(col_order))
-all_instruments = rbind(all_instruments,egfr2016_exp)
+egfr2016_exp = extract_instruments("ieu-a-1105") %>% dplyr::select(all_of(col_order))
+egfr2016_exp$exposure = "eGFR (CKDGen2016)"
+
+all_instruments = rbind(all_instruments, egfr2016_exp)
 
 all_instruments = F_statistic(all_instruments)
 
@@ -45,13 +48,13 @@ data.table::fwrite(all_instruments, paste0(rdsf_personal,"data/format_data/all_i
 # Sensitivity analyses between
 # urate UKB and eGFR CKDGen
 
-exposure_name <- c("Urate (CKDGen)", "eGFR (CKDGen2019)", "Urate (UKB)", "SBP (UKB)","DBP (UKB)")
-outcome_name <- c("egfr_sd", "exurate_sd", "sbp_clean", "dbp_clean","urate_clean")
+exposure_name <- c("Urate (CKDGen)", "eGFR (CKDGen2019)", "Urate (UKB)", "SBP (UKB)","DBP (UKB)", "PP (UKB)")
+outcome_name <- c("egfr_sd", "exurate_sd", "sbp", "dbp", "pp", "urate")
 
 all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
 
-filtered_combinations <- subset(all_combinations, !(exposure %in% c("Urate (UKB)","SBP (UKB)","DBP (UKB)") & outcome %in% c("urate_clean","sbp_clean", "dbp_clean") |
-                                                    exposure %in% c("urate_clean","sbp_clean", "dbp_clean") & outcome %in% c("Urate (UKB)","SBP (UKB)","DBP (UKB)")))
+filtered_combinations <- subset(all_combinations, !(exposure %in% c("Urate (UKB)","SBP (UKB)","DBP (UKB)", "PP (UKB)") & outcome %in% c("urate","sbp", "dbp", "pp") |
+                                                    exposure %in% c("urate","sbp", "dbp", "pp") & outcome %in% c("Urate (UKB)","SBP (UKB)","DBP (UKB)", "PP (UKB)")))
 
 # define the overlap between strings -------------------------------------------
 
@@ -64,7 +67,7 @@ check_overlap <- function(str1, str2, substrings) {
   return(FALSE)
 }
 
-substrings <- c("sbp", "dbp", "urate", "egfr")
+substrings <- c("sbp", "dbp", "pp", "urate", "egfr")
 
 # Create empty results datasets ------------------------------------------------
 
@@ -124,30 +127,29 @@ write.table(hetero_sf_bin,file = paste0(rdsf_personal,"results/hetero_sf_bin.csv
 # additional analyses between bp and egfr 2016----------------------------------
 # bp on ieu-a-1105 -------------------------------------------------------------
 
-exposure_name <- c("SBP (UKB)","DBP (UKB)","ieu-a-1105")
-outcome_name <- c("sbp_clean", "dbp_clean","ieu-a-1105")
+exposure_name <- c("SBP (UKB)","DBP (UKB)", "PP (UKB)", "ieu-a-1105")
+outcome_name <- c("sbp", "dbp", "pp","ieu-a-1105")
 
 all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
 
-df1 = uvmr("SBP (UKB)","ieu-a-1105", outcome_sd = 0.24)
+df1 = uvmr("SBP (UKB)", "ieu-a-1105", outcome_sd = 0.24)
 
-df2 = uvmr("DBP (UKB)","ieu-a-1105", outcome_sd = 0.24)
+df2 = uvmr("DBP (UKB)", "ieu-a-1105", outcome_sd = 0.24)
 
-df3 = uvmr("ieu-a-1105", "sbp_clean", exposure_sd = 0.24)
+df3 = uvmr("PP (UKB)", "ieu-a-1105", exposure_sd = 0.24)
 
-df4 = uvmr("ieu-a-1105","dbp_clean", exposure_sd = 0.24)
+df4 = uvmr("ieu-a-1105", "sbp", exposure_sd = 0.24)
 
-sup_results = rbind(df1[[1]],df2[[1]],df3[[1]],df4[[1]])
+df5 = uvmr("ieu-a-1105","dbp", exposure_sd = 0.24)
 
-sup_pleio = rbind(df1[[2]],df2[[2]],df3[[2]],df4[[2]])
+df6 = uvmr("ieu-a-1105","pp", exposure_sd = 0.24)
 
-sup_hetero = rbind(df1[[3]],df2[[3]],df3[[3]],df4[[3]])
-
-sup_sf_results = rbind(df1[[4]],df2[[4]],df3[[4]],df4[[4]])
-
-sup_sf_pleio = rbind(df1[[5]],df2[[5]],df3[[5]],df4[[5]])
-
-sup_sf_hetero = rbind(df1[[6]],df2[[6]],df3[[6]],df4[[6]])
+sup_results <- do.call(rbind, lapply(list(df1, df2, df3, df4, df5, df6), `[[`, 1))
+sup_pleio <- do.call(rbind, lapply(list(df1, df2, df3, df4, df5, df6), `[[`, 2))
+sup_hetero <- do.call(rbind, lapply(list(df1, df2, df3, df4, df5, df6), `[[`, 3))
+sup_sf_results <- do.call(rbind, lapply(list(df1, df2, df3, df4, df5, df6), `[[`, 4))
+sup_sf_pleio <- do.call(rbind, lapply(list(df1, df2, df3, df4, df5, df6), `[[`, 5))
+sup_sf_hetero <- do.call(rbind, lapply(list(df1, df2, df3, df4, df5, df6), `[[`, 6))
 
 write.table(sup_results,file = paste0(rdsf_personal,"results/sup_results.csv"),
             sep= ',', row.names = F,col.names= T)
