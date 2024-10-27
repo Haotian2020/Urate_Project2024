@@ -2,6 +2,8 @@
 
 # Source: https://marinalearning.netlify.app/2021/03/22/setting-up-multivariable-mendelian-randomization-analysis/
 
+source("fn-ld_clump_local.R")
+
 get_mv_exposures <- function(tophits_list, full_gwas_list) {
   
   ###
