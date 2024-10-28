@@ -61,7 +61,7 @@ dev.off()
 
 p = uvmr_plot(dat = res,
               exp = "eGFR (CKDGen2019)",
-              out = c("SBP (UKB)", "DBP (UKB)", "Urate (CKDGen)"),
+              out = c("SBP (UKB)", "DBP (UKB)", ,"Urate (CKDGen)"),
               line_number = 2,
               xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in log(eGFR)",
               x_ticks = c(-0.25,-0.2,-0.15,-0.1,-0.05,0,0.05,0.1),
@@ -74,3 +74,23 @@ plot.new()
 mtext("D)",side = 3,line = 2,adj = 0, cex = 1.5,padj = 0)
 print(p)
 dev.off()
+
+# add pp plot
+p = uvmr_plot(dat = res,
+              exp = "PP (UKB)",
+              out = c("eGFR (CKDGen2019)", "Urate (CKDGen)"),
+              line_number = 1,
+              xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in PP",
+              x_ticks = c(-0.2,-0.15,-0.1,-0.05,0,0.05,0.15,0.2),
+              intervals = c(-0.2,0.2))
+
+p
+
+tiff(paste0(rdsf_personal,"results/pp on each outcome forestplot.tiff"),width = 18, height = 3.5, res = 300, units = "in")
+plot.new()
+mtext("E)",side = 3,line = 2,adj = 0, cex = 1.5,padj = 0)
+print(p)
+dev.off()
+
+
+

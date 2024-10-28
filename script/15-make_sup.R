@@ -15,8 +15,9 @@ risk_factor_order <- factor(
     "Urate (UKB)",
     "SBP (UKB)",
     "DBP (UKB)",
+    "PP (UKB)",
     "Urate (UKB s1)", "Urate (UKB s2)", "SBP (UKB s1)",  
-    "SBP (UKB s2)", "DBP (UKB s1)", "DBP (UKB s2)")
+    "SBP (UKB s2)", "DBP (UKB s1)", "DBP (UKB s2)", "PP (UKB s1)", "PP (UKB s2)")
 )
 
 apply_custom_order <- function(df, order_type) {
@@ -43,13 +44,13 @@ dat = fread(paste0(rdsf_personal,"data/format_data/all_instruments.csv"))
 
 names(dat) <- sub("\\.exposure", "", names(dat))
 
-selected_col = c("exposure","SNP","effect_allele","other_allele","eaf","beta","se","pval","samplesize","F_stat","chr","pos")
+selected_col = c("exposure","SNP","effect_allele","other_allele","eaf","beta","se","pval","samplesize","Rsq","F_stat","chr","pos")
 
 dat <- dat %>% select(all_of(selected_col))
 
 dat <- apply_custom_order(dat,"risk_factor_order")
 
-data.table::fwrite(dat,paste0(rdsf_personal,"results/shee1.csv"))
+data.table::fwrite(dat, paste0(rdsf_personal,"results/shee1.csv"))
 
 # hetero test sheet ------------------------------------------------------------
 
@@ -136,8 +137,5 @@ data.table::fwrite(dat,paste0(rdsf_personal,"results/shee6_4.csv"))
 # mvmr -------------------------------------------------------------------------
 
 # directly use the resutls from "09-perform_mvmr.R"
-
-
-
 
 

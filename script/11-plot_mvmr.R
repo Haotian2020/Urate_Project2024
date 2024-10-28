@@ -11,11 +11,13 @@ exurate_sbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/exurate_sbp_egfr_mvm
 
 exurate_dbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/exurate_dbp_egfr_mvmr.csv"))
 
+exurate_pp_egfr_mvmr = fread(paste0(rdsf_personal,"results/exurate_pp_egfr_mvmr.csv"))
+
 res = fread(paste0(paste0(rdsf_personal,"results/results_bin.csv")))
 
 # format results ---------------------------------------------------------------
 
-replacement_rules <- c("urate_clean" = "Urate (UKB)", "sbp_clean" = "SBP (UKB)", "dbp_clean" = "DBP (UKB)", "Urate CKDGen" = "Urate (CKDGen)",
+replacement_rules <- c("urate" = "Urate (UKB)", "sbp" = "SBP (UKB)", "dbp" = "DBP (UKB)", "Urate CKDGen" = "Urate (CKDGen)",
                        "eGFR (CKDGen)" = "eGFR (CKDGen2019)")
 
 for (pattern in names(replacement_rules)) {
@@ -32,6 +34,10 @@ mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (C
 mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
                res %>% subset(exposure == "DBP (UKB)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
                exurate_dbp_egfr_mvmr,fill = T)
+
+mydata = rbind(res %>% subset(exposure == "Urate (CKDGen)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
+               res %>% subset(exposure == "PP (UKB)" & outcome == "eGFR (CKDGen2019)") %>% subset(method == "Inverse variance weighted"),
+               exurate_pp_egfr_mvmr,fill = T)
 
 mydata = mydata %>% generate_odds_ratios()
 
@@ -57,7 +63,7 @@ mydata$exposure <-
   factor(
     mydata$exposure,
     levels = c(
-      "Urate (CKDGen)","SBP (UKB)","DBP (UKB)","eGFR(CKDGen)"))
+      "Urate (CKDGen)","SBP (UKB)","DBP (UKB)", "PP (UKB)","eGFR(CKDGen)"))
 
 sorted_index <- order(mydata$exposure,mydata$method)
 mydata = mydata[sorted_index,]
@@ -133,6 +139,12 @@ print(p)
 mtext("B)",side = 3,line = 2,adj = 0,cex = 1.5,padj = 0)
 dev.off()
 
+tiff(paste0(rdsf_personal,"results/exurate pp ukb on egfr forestplot.tiff"),width = 18, height = 2.5, res = 300, units = "in")
+plot.new()
+print(p)
+mtext("C)",side = 3,line = 2,adj = 0,cex = 1.5,padj = 0)
+dev.off()
+
 # urate ukb  + bp ukb (sample split method) --> egfr ckdgen --------------------
 # compare with urate ukb on egfr ckdgen and bp ukb on egfr ckdgen --------------
 
@@ -142,23 +154,28 @@ uratesbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/uratesbp_egfr_mvmr.csv"
 
 uratedbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/uratedbp_egfr_mvmr.csv"))
 
+uratedbp_egfr_mvmr = fread(paste0(rdsf_personal,"results/uratepp_egfr_mvmr.csv"))
+
 # here we need to compare with the results from sample-split method ------------
 
-urate_egfr_mr_meta = format_meta(uvmr("Urate (UKB s1)","egfr_sd")[[1]],uvmr("Urate (UKB s2)","egfr_sd")[[1]])
+urate_egfr_mr_meta = format_meta(uvmr("Urate (UKB s1)", "egfr_sd")[[1]],
+                                 uvmr("Urate (UKB s2)", "egfr_sd")[[1]])
 
-sbp_egfr_mr_meta = format_meta(uvmr("SBP (UKB s1)","egfr_sd")[[1]],uvmr("SBP (UKB s2)","egfr_sd")[[1]])
+sbp_egfr_mr_meta = format_meta(uvmr("SBP (UKB s1)", "egfr_sd")[[1]],
+                               uvmr("SBP (UKB s2)", "egfr_sd")[[1]])
 
-dbp_egfr_mr_meta = format_meta(uvmr("DBP (UKB s1)","egfr_sd")[[1]],uvmr("DBP (UKB s2)","egfr_sd")[[1]])
+dbp_egfr_mr_meta = format_meta(uvmr("DBP (UKB s1)", "egfr_sd")[[1]],
+                               uvmr("DBP (UKB s2)", "egfr_sd")[[1]])
+
+pp_egfr_mr_meta = format_meta(uvmr("PP (UKB s1)", "egfr_sd")[[1]],
+                               uvmr("PP (UKB s2)", "egfr_sd")[[1]])
 
 # format results ---------------------------------------------------------------
 
-df <- rbind(sbp_egfr_mr_meta, dbp_egfr_mr_meta, urate_egfr_mr_meta)%>% subset(method == "Inverse variance weighted")
+df <- rbind(sbp_egfr_mr_meta, dbp_egfr_mr_meta, urate_egfr_mr_meta, pp_egfr_mr_meta)%>% subset(method == "Inverse variance weighted")
 
-df$outcome = "eGFR (CKDGen2019)"
-df$exposure[1] = "SBP (UKB Meta)"
-df$exposure[2] = "DBP (UKB Meta)"
-df$exposure[3] = "Urate (UKB Meta)"
-
+df$outcome <- "eGFR (CKDGen2019)"
+df$exposure <- c("SBP (UKB Meta)", "DBP (UKB Meta)", "Urate (UKB Meta)", "PP (UKB Meta)")
 
 mydata = rbind(df %>% subset(exposure == "Urate (UKB Meta)"),
                df %>% subset(exposure == "SBP (UKB Meta)"),
@@ -167,6 +184,10 @@ mydata = rbind(df %>% subset(exposure == "Urate (UKB Meta)"),
 mydata = rbind(df %>% subset(exposure == "Urate (UKB Meta)"),
                df %>% subset(exposure == "DBP (UKB Meta)"),
                uratedbp_egfr_mvmr)
+
+mydata = rbind(df %>% subset(exposure == "Urate (UKB Meta)"),
+               df %>% subset(exposure == "PP (UKB Meta)"),
+               uratepp_egfr_mvmr)
 
 mydata = mydata %>% generate_odds_ratios()
 
@@ -264,4 +285,10 @@ tiff(paste0(rdsf_personal,"results/urate meta dbp ukb on egfr forestplot.tiff"),
 plot.new()
 print(p)
 mtext("B)",side = 3,line = 2,adj = 0,cex = 1.5,padj = -1)
+dev.off()
+
+tiff(paste0(rdsf_personal,"results/urate meta pp ukb on egfr forestplot.tiff"),width = 18, height = 2.5, res = 300, units = "in")
+plot.new()
+print(p)
+mtext("C)",side = 3,line = 2,adj = 0,cex = 1.5,padj = -1)
 dev.off()
