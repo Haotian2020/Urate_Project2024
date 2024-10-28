@@ -34,11 +34,11 @@ format_meta <- function(mr1, mr2) {
 
 format_mvmrmeta <- function(mr1, mr2,exp1,exp2) {
   mr_bin = c()
-  mr1exp1 = mr1$result[stringr::str_detect(string = mr1$result$exposure, pattern = exp1),]
-  mr2exp1 = mr2$result[stringr::str_detect(string = mr2$result$exposure, pattern = exp1),]
+  mr1exp1 = mr1[stringr::str_detect(string = mr1$exposure, pattern = exp1),]
+  mr2exp1 = mr2[stringr::str_detect(string = mr2$exposure, pattern = exp1),]
   
-  mr1exp2 = mr1$result[stringr::str_detect(string = mr1$result$exposure, pattern = exp2),]
-  mr2exp2 = mr2$result[stringr::str_detect(string = mr2$result$exposure, pattern = exp2),]
+  mr1exp2 = mr1[stringr::str_detect(string = mr1$exposure, pattern = exp2),]
+  mr2exp2 = mr2[stringr::str_detect(string = mr2$exposure, pattern = exp2),]
   
   print(paste0("do meta-analysis for MVMR results for ",exp1))
   meta_mrexp1 = metagen(TE = c(mr1exp1$b, mr2exp1$b), seTE = c(mr1exp1$se, mr2exp1$se))
