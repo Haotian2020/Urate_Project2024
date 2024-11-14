@@ -6,22 +6,22 @@ source("fn-ld_clump_local.R")
 
 get_mv_exposures <- function(tophits_list, full_gwas_list) {
   
-  ###
   ### This is a modified version of `mv_extract_exposures` function in TwoSampleMR package.
-  ###
   
   # Collapse list of exposures' tophits into a dataframe
-  exposures <- bind_rows(tophits_list)
-  
+  exposures <- bind_rows(tophits_list) %>% data.frame()
+  if (!"SNP" %in% colnames(exposures)) stop("SNP column not found in tophits_list")
   # clump exposures: this will produce a list of instruments (shared and unique) of the given exposures
-  temp <- exposures
-  temp$id.exposure <- 1
-  temp <- ld_clump_local(temp)
-  exposures <- filter(exposures, SNP %in% temp$SNP)
+  tmp <- exposures
+  tmp$id.exposure <- 1
+  tmp <- clump_data(tmp)
+  print("Finish LD clumping")
+  exposures <- exposures %>% dplyr::filter(SNP %in% tmp$SNP)
   
   # subset full gwas summary stats of each exposure to the list of SNPs (instruments) produced above
   for (i in 1:length(full_gwas_list)){
-    full_gwas_list[[i]] <- full_gwas_list[[i]] %>% filter(SNP %in% exposures$SNP)
+    print("Selecting SNPs from two exposure data")
+    full_gwas_list[[i]] <- full_gwas_list[[i]] %>% dplyr::filter(SNP %in% exposures$SNP)
   }
   
   # Collapse lists of subset gwas into a dataframe
@@ -34,9 +34,9 @@ get_mv_exposures <- function(tophits_list, full_gwas_list) {
   id_exposure <- unique(d1$id.outcome) 
   
   # convert first trait to exposure format  -- exp1 is exposure
-  tmp_exposure <- d1 %>% filter(id.outcome == id_exposure[1]) %>% convert_outcome_to_exposure()
+  tmp_exposure <- d1 %>% dplyr::filter(id.outcome == id_exposure[1]) %>% convert_outcome_to_exposure()
   # keep other traits (n>=2) as outcome -- exp2+ are outcomes
-  tmp_outcome <- d1 %>% filter(id.outcome != id_exposure[1])
+  tmp_outcome <- d1 %>% dplyr::filter(id.outcome != id_exposure[1])
   
   # Harmonise against the first trait
   d <- harmonise_data(exposure_dat = tmp_exposure, 
@@ -45,14 +45,14 @@ get_mv_exposures <- function(tophits_list, full_gwas_list) {
   # Only keep SNPs that are present in all
   snps_not_in_all <- d %>% 
     dplyr::count(SNP)  %>% 
-    filter(n < length(tophits_list)-1) %>%
+    dplyr::filter(n < length(tophits_list)-1) %>%
     pull(SNP)
-  d <- filter(d, !SNP %in% snps_not_in_all)
+  d <- dplyr::filter(d, !SNP %in% snps_not_in_all)
   
   # Subset and concat data
   
   # for exp1 get exposure cols
-  dh1x <- d %>% filter(id.outcome == id.outcome[1]) %>% 
+  dh1x <- d %>% dplyr::filter(id.outcome == id.outcome[1]) %>% 
     dplyr::select(SNP, dplyr::contains("exposure"))
   # for exp2 get outcome cols
   dh2x <-d %>%  dplyr::select(SNP, dplyr::contains("outcome"))
@@ -63,6 +63,7 @@ get_mv_exposures <- function(tophits_list, full_gwas_list) {
     dplyr::select(-c("samplesize.exposure" ,"mr_keep.exposure", "pval_origin.exposure")) %>% 
     distinct()
   
+  print("Finish making exposure dataset for MVMR")
   return(exposure_dat)
 }
 
@@ -89,7 +90,7 @@ make_mvmr_input <- function(exposure_dat, outcome.data=""){
   #                                       outcomes = outcome.id.mrbase)
   # } else if (outcome.data != ""){
   #   # if outcome df is provided
-  outcome_dat <- outcome.data %>% filter(SNP %in% exposure_dat$SNP)
+  outcome_dat <- outcome.data %>% dplyr::filter(SNP %in% exposure_dat$SNP)
   
   # harmonize datasets
   exposure_dat <- exposure_dat %>% mutate(id.exposure = exposure)
