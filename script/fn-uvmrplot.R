@@ -34,31 +34,45 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
                   nsmall = 3))
   mydata$pvalue <-
     format(round(mydata$pval, digits = 3))
+  
   mydata$method <-
     factor(
       mydata$method,
       levels = c(
         "Inverse variance weighted",
-        "Weighted median",
-        "Steiger Filtering",
-        "Weighted mode",
         "MR Egger",
-        "Simple mode"
+        "Weighted median",
+        "Weighted mode",
+        "Simple mode",
+        "Steiger Filtering"
       )
     )
   
-  mydata$outcome <-
+  mydata$method <-
     factor(
-      mydata$outcome,
-      levels = c("Urate (CKDGen)",
-                 "Urate (UKB)",
-                 "SBP (UKB)",
-                 "DBP (UKB)",
-                 "eGFR (CKDGen2019)",
-                 "Serum creatinine (eGFRcrea)")
+      mydata$method,
+      levels = c(
+        "Urate (CKDGen)",
+        "Urate (UKB)",
+        "SBP (UKB)",
+        "DBP (UKB)",
+        "PP (UKB)",
+        "eGFR (CKDGen2021)",
+        "eGFR (CKDGen2016)"
+      )
     )
   
-  sorted_index <- order(mydata$outcome,mydata$method)
+  mydata <- mydata %>%
+    mutate(method = if_else(method == "Inverse variance weighted", "IVW", method))
+ 
+  if ("type" %in% names(mydata) && all(c("Ori", "Steiger") %in% mydata$type)) {
+    mydata$type <- factor(
+      mydata$type,
+      levels = c("Ori", "Steiger")
+    )
+  }
+  
+  sorted_index <- order(mydata$outcome,mydata$type,mydata$method)
   mydata = mydata[sorted_index, ]
   
   # make the table shown with the figure -----------------------------------------
