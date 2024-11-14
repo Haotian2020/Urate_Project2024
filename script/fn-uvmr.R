@@ -7,26 +7,37 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
   
   # Load instruments -----------------------------------------------------------
   
-  instruments <- data.table::fread(paste0(rdsf_personal,"data/format_data/all_instruments.csv"), data.table = FALSE)
+  # instruments <- data.table::fread(paste0(rdsf_personal,"data/format_data/all_instruments.csv"), data.table = FALSE)
+  # define path
+  folder_path <- paste0(rdsf_personal, "/data/format_data")
   
-  ## Create exposure dataset ---------------------------------------------------
-  if(exposure %in% instruments$exposure){
-    
-  print(paste0("Reading ",exposure," from all instruments file"))
-    
-  tmp_exp <- exposure
+  ## Extract exposure dataset --------------------------------------------------
+  exposure_files <- list.files(path = folder_path, pattern = "_tophits.tsv$", full.names = FALSE)
   
-  exp <- subset(instruments,exposure == tmp_exp)
+  exposure_list <- sub("_tophits.tsv$", "", exposure_files)
   
-  unique(exp$exposure)
+  if(exposure %in% exposure_list){
+  
+  print(paste0("Reading ",exposure," from local formatted data"))
+  
+  exp <- vroom(paste0(rdsf_personal,"data/format_data/",exposure,"_tophits.tsv"))
   
   }else{
+    
+    print(paste0("Reading ",exposure," from IEU open GWAS database"))
+    
     exp <- extract_instruments(exposure)
   }
   
   # Extract outcome data -------------------------------------------------------
+
+  # list all the files
+  outcome_files <- list.files(path = folder_path, pattern = "_GWAS_tidy_outcome.csv$", full.names = FALSE)
   
-  if (outcome %in% c("egfr_sd","exurate_sd","urate","sbp","dbp", "pp", "stroke","early50","late60","hpt","ckd")) {
+  # remove "_GWAS_tidy_outcome.csv"
+  outcome_list <- sub("_GWAS_tidy_outcome.csv$", "", outcome_files)
+  
+  if (outcome %in% outcome_list) {
     
     print(paste0("Reading ",outcome," from local formatted data"))
     out <- TwoSampleMR::read_outcome_data(snps = exp$SNP,
@@ -43,7 +54,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
                              samplesize_col = "samplesize.outcome")
   } else {
     
-    print("Reading from IEU open GWAS database")
+    print(paste0("Reading", outcome,"from IEU open GWAS database"))
     out <- TwoSampleMR::extract_outcome_data(snps = exp$SNP,
                                              outcomes = outcome,
                                              proxies = FALSE)
@@ -70,6 +81,8 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
     set.seed(123)
     mr <- suppressMessages(TwoSampleMR::mr(dat = dat) %>% split_outcome() %>% split_exposure())
     mr$type = "Ori"
+    
+    # save figure --------------------------------------------------------------
     
     if(plot == T) {
       save_scatter_plot(dat,mr)
