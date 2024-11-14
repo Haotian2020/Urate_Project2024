@@ -8,13 +8,14 @@ source("fn-get_mv_exp.R")
 source("fn-ld_clump_local.R")
 
 MVMR_function  <- function(exp1,exp2,outcome1){
-  
   # extract instruments --------------------------------------------------------
   # identify if it is from IEU open GWAS database ------------------------------
   
   if(exp1%in%ao$id & exp2%in%ao$id){
-    exptophits1 = extract_instruments(exp1)%>% select(-c("chr.exposure","pos.exposure"))
-    exptophits2 = extract_instruments(exp2)%>% select(-c("chr.exposure","pos.exposure"))
+    exptophits1 = extract_instruments(exp1)%>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+                                                        "eaf.exposure","beta.exposure","se.exposure","pval_origin.exposure","mr_keep.exposure"))
+    exptophits2 = extract_instruments(exp2)%>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+                                                        "eaf.exposure","beta.exposure","se.exposure","pval_origin.exposure","mr_keep.exposure"))
     
     tophits_list <- list(exptophits1, exptophits2)
     tophits <- bind_rows(tophits_list) %>% pull(SNP)
@@ -27,8 +28,10 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     
   }else if(exp1%notin%ao$id & exp2%notin%ao$id){
     
-    exptophits1 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv"))%>% select(-c("chr.exposure","pos.exposure"))
-    exptophits2 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp2,"_tophits.tsv"))%>% select(-c("chr.exposure","pos.exposure"))
+    exptophits1 = fread(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv"))%>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+                                                                                                   "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
+    exptophits2 = fread(paste0(rdsf_personal,"data/format_data/",exp2,"_tophits.tsv"))%>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+                                                                                                   "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
     
     tophits_list <- list(exptophits1, exptophits2)
     tophits <- bind_rows(tophits_list) %>% pull(SNP)
@@ -41,19 +44,18 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     
   }else if(exp1%notin%ao$id & exp2%in%ao$id){
     
-    exptophits1 = read_tsv(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv")) %>% select(-c("chr.exposure","pos.exposure"))
-    exptophits2 = extract_instruments(exp2) %>% select(-c("chr.exposure","pos.exposure"))
+    exptophits1 = fread(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv")) %>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+                                                                                                    "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
+    exptophits2 = extract_instruments(exp2) %>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+                                                         "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
 
-    print(colnames(exptophits1))
-    print(colnames(exptophits2))
-    
     exptophits2 = exptophits2[,colnames(exptophits1)]
     
     tophits_list <- list(exptophits1, exptophits2)
     tophits <- bind_rows(tophits_list) %>% pull(SNP)
     
-    expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv")) %>% select(-c("chr.outcome", "pos.outcome", "pval_origin.outcome"))
-    expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2, proxies = T) %>% select(colnames(expgwas1))
+    expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv")) %>% dplyr::select(-c("chr.outcome", "pos.outcome", "pval_origin.outcome"))
+    expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2, proxies = T) %>% dplyr::select(colnames(expgwas1))
     full_gwas_list <- list(expgwas1, expgwas2)
     print("exp1 is extracted from local")
     print("exp2 is extracted from IEU open GWAS")
@@ -102,8 +104,10 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     BYG = mvdat$outcome_beta,
     seBYG = mvdat$outcome_se
   )
-  print(head(mvmr_input_dat))
+  
   sres <- strength_mvmr(r_input = mvmr_input_dat, gencov = 0)
+  print(sres)
   
   return(list(result = res_bmis, F_stat = sres))
 }
+
