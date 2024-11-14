@@ -31,6 +31,52 @@ mvmr_urate_bmi_egfr = MVMR_function("urate","ieu-a-2","egfr_sd")
 
 uvmr("ieu-a-2", "egfr_sd")
 
+# id.exposure id.outcome           outcome        exposure
+# 1     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
+# 2     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
+# 3     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
+# 4     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
+# 5     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
+# method nsnp           b         se      pval type
+# 1                  MR Egger   79  0.04312029 0.06056701 0.4786513  Ori
+# 2           Weighted median   79  0.02144951 0.02240052 0.3382920  Ori
+# 3 Inverse variance weighted   79  0.01982116 0.02486343 0.4253342  Ori
+# 4               Simple mode   79 -0.03873009 0.05606928 0.4917706  Ori
+# 5             Weighted mode   79  0.02385707 0.03135630 0.4490477  Ori
+# 
+# [[2]]
+# id.exposure id.outcome           outcome                      exposure
+# 1     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index || id:ieu-a-2
+# egger_intercept          se      pval       Isq type
+# 1   -0.0007093823 0.001679708 0.6739649 0.9834903  Ori
+# 
+# [[3]]
+# id.exposure id.outcome           outcome                      exposure
+# 1     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index || id:ieu-a-2
+# 2     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index || id:ieu-a-2
+# method        Q Q_df       Q_pval type
+# 1                  MR Egger 314.0143   77 2.237977e-30  Ori
+# 2 Inverse variance weighted 314.7416   78 3.453153e-30  Ori
+
+MVMR_function("exurate_sd","ieu-a-2","egfr_cys_sd")
+# $result
+# id.exposure                      exposure id.outcome     outcome nsnp
+# 1     ieu-a-2 Body mass index || id:ieu-a-2     DE7oY6 egfr_cys_sd   64
+# 2      LrjzHo                Urate (CKDGen)     DE7oY6 egfr_cys_sd   61
+# b         se        pval method
+# 1 -0.2147843 0.08459193 0.011114950   MVMR
+# 2 -0.2370906 0.07336442 0.001230631   MVMR
+
+MVMR_function("urate","ieu-a-2","egfr_cys_sd")
+
+# $result
+# id.exposure                      exposure id.outcome     outcome nsnp
+# 1     ieu-a-2 Body mass index || id:ieu-a-2     QjQwGj egfr_cys_sd   42
+# 2      jQPGtw                   Urate (UKB)     QjQwGj egfr_cys_sd  204
+# b         se         pval method
+# 1 -0.2404377 0.08047784 2.811535e-03   MVMR
+# 2 -0.4076774 0.05746364 1.297933e-12   MVMR
+
 # format names -----------------------------------------------------------------
 
 exurate_sbp_egfr_mvmr = data.frame(mvmr_exurate_sbp_egfr$result)
