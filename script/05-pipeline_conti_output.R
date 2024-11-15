@@ -86,7 +86,7 @@ data.table::fwrite(sbps2clean,paste0(rdsf_personal,"data/format_data/sbp_s2_GWAS
 # splitted samples: dbp gwas format and instruments ----------------------------
 
 dbps1clean = ContiOutputFormatFunction(dat_name = "dbp_avg_s1_imputed.txt.gz",outcome_name = "DBP (UKB s1)",
-                                       mean = 82.12938, sd = 10.04691, samplesize = 206924 )
+                                       mean = 82.12938, sd = 10.04691, samplesize = 206924)
 dbps1_tophits = ld_clump_local(dbps1clean)
 
 dbps2clean = ContiOutputFormatFunction(dat_name = "dbp_avg_s2_imputed.txt.gz",outcome_name = "DBP (UKB s2)",
