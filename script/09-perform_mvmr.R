@@ -25,57 +25,49 @@ print(mvmr_exurate_pp_egfr)
 
 # urate and bmi on egfr (CKDGen2019) -------------------------------------------
 
-mvmr_exurate_bmi_egfr = MVMR_function("exurate_sd","ieu-a-2","egfr_sd")
+mvmr_exurate_bmi_egfr = MVMR_function("exurate_sd","ukb-b-19953","egfr_sd")
 
-mvmr_urate_bmi_egfr = MVMR_function("urate","ieu-a-2","egfr_sd")
+mvmr_urate_bmi_egfr = MVMR_function("urate","ukb-b-19953","egfr_sd")
 
-uvmr("ieu-a-2", "egfr_sd")
+bmi_egfr = uvmr("ukb-b-19953", "egfr_sd")
 
-# id.exposure id.outcome           outcome        exposure
-# 1     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
-# 2     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
-# 3     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
-# 4     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
-# 5     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index
-# method nsnp           b         se      pval type
-# 1                  MR Egger   79  0.04312029 0.06056701 0.4786513  Ori
-# 2           Weighted median   79  0.02144951 0.02240052 0.3382920  Ori
-# 3 Inverse variance weighted   79  0.01982116 0.02486343 0.4253342  Ori
-# 4               Simple mode   79 -0.03873009 0.05606928 0.4917706  Ori
-# 5             Weighted mode   79  0.02385707 0.03135630 0.4490477  Ori
+bmi_egfr_cys = uvmr("ukb-b-19953", "egfr_cys_sd")
+# 2           Weighted median  399 -0.3855276 0.02393745  2.329302e-58 Steiger
+# 3 Inverse variance weighted  399 -0.3776102 0.01562088 4.235237e-129 Steiger
+# 4               Simple mode  399 -0.3610444 0.07446347  1.786129e-06 Steiger
+# 5             Weighted mode  399 -0.3934113 0.04105014  1.036006e-19 Steiger
 # 
-# [[2]]
-# id.exposure id.outcome           outcome                      exposure
-# 1     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index || id:ieu-a-2
-# egger_intercept          se      pval       Isq type
-# 1   -0.0007093823 0.001679708 0.6739649 0.9834903  Ori
+# [[5]]
+# id.exposure id.outcome       outcome                                exposure
+# 1 ukb-b-19953     xzp985 eGFR cys 2021 Body mass index (BMI) || id:ukb-b-19953
+# egger_intercept           se      pval      Isq    type
+# 1    0.0002807193 0.0007600161 0.7120566 0.984295 Steiger
 # 
-# [[3]]
-# id.exposure id.outcome           outcome                      exposure
-# 1     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index || id:ieu-a-2
-# 2     ieu-a-2     RyWaLH eGFR (CKDGen2019) Body mass index || id:ieu-a-2
-# method        Q Q_df       Q_pval type
-# 1                  MR Egger 314.0143   77 2.237977e-30  Ori
-# 2 Inverse variance weighted 314.7416   78 3.453153e-30  Ori
+# [[6]]
+# id.exposure id.outcome       outcome                                exposure
+# 1 ukb-b-19953     xzp985 eGFR cys 2021 Body mass index (BMI) || id:ukb-b-19953
+# 2 ukb-b-19953     xzp985 eGFR cys 2021 Body mass index (BMI) || id:ukb-b-19953
+# method        Q Q_df       Q_pval    type
+# 1                  MR Egger 738.2823  397 7.689325e-23 Steiger
+# 2 Inverse variance weighted 738.5360  398 9.917593e-23 Steiger
 
-MVMR_function("exurate_sd","ieu-a-2","egfr_cys_sd")
+MVMR_function("exurate_sd","ukb-b-19953","egfr_cys_sd")
 # $result
-# id.exposure                      exposure id.outcome     outcome nsnp
-# 1     ieu-a-2 Body mass index || id:ieu-a-2     DE7oY6 egfr_cys_sd   64
-# 2      LrjzHo                Urate (CKDGen)     DE7oY6 egfr_cys_sd   61
-# b         se        pval method
-# 1 -0.2147843 0.08459193 0.011114950   MVMR
-# 2 -0.2370906 0.07336442 0.001230631   MVMR
+# id.exposure                                exposure id.outcome     outcome
+# 1      LrjzHo                          Urate (CKDGen)     gnf0Px egfr_cys_sd
+# 2 ukb-b-19953 Body mass index (BMI) || id:ukb-b-19953     gnf0Px egfr_cys_sd
+# nsnp          b         se         pval method
+# 1   55 -0.1878733 0.03974361 2.277131e-06   MVMR
+# 2  359 -0.3906078 0.03425483 4.039597e-30   MVMR
 
-MVMR_function("urate","ieu-a-2","egfr_cys_sd")
-
+MVMR_function("urate","ukb-b-19953","egfr_cys_sd")
 # $result
-# id.exposure                      exposure id.outcome     outcome nsnp
-# 1     ieu-a-2 Body mass index || id:ieu-a-2     QjQwGj egfr_cys_sd   42
-# 2      jQPGtw                   Urate (UKB)     QjQwGj egfr_cys_sd  204
-# b         se         pval method
-# 1 -0.2404377 0.08047784 2.811535e-03   MVMR
-# 2 -0.4076774 0.05746364 1.297933e-12   MVMR
+# id.exposure                                exposure id.outcome     outcome
+# 1      jQPGtw                             Urate (UKB)     dWgHJ5 egfr_cys_sd
+# 2 ukb-b-19953 Body mass index (BMI) || id:ukb-b-19953     dWgHJ5 egfr_cys_sd
+# nsnp          b         se         pval method
+# 1  194 -0.3529767 0.04342505 4.349519e-16   MVMR
+# 2  270 -0.3319847 0.04601081 5.379038e-13   MVMR
 
 # format names -----------------------------------------------------------------
 
@@ -88,6 +80,9 @@ exurate_dbp_egfr_mvmr$outcome = "eGFR (CKDGen2019)"
 exurate_pp_egfr_mvmr = data.frame(mvmr_exurate_pp_egfr$result)
 exurate_pp_egfr_mvmr$outcome = "eGFR (CKDGen2019)"
 
+exurate_bmi_egfr_mvmr = data.frame(mvmr_exurate_bmi_egfr$result)
+exurate_bmi_egfr_mvmr$outcome = "eGFR (CKDGen2019)"
+
 # write results ----------------------------------------------------------------
 # mvmr results need to be save separately to distinguish the duplicated exposure effects
 
@@ -96,6 +91,8 @@ write.table(exurate_sbp_egfr_mvmr, file = paste0(rdsf_personal,"results/exurate_
 write.table(exurate_dbp_egfr_mvmr, file = paste0(rdsf_personal,"results/exurate_dbp_egfr_mvmr.csv"),
             sep= ',', row.names = F,col.names= T)
 write.table(exurate_pp_egfr_mvmr, file = paste0(rdsf_personal,"results/exurate_pp_egfr_mvmr.csv"),
+            sep= ',', row.names = F,col.names= T)
+write.table(exurate_bmi_egfr_mvmr, file = paste0(rdsf_personal,"results/exurate_bmi_egfr_mvmr.csv"),
             sep= ',', row.names = F,col.names= T)
 
 # urate and bp from UKB on egfr ckdgen -----------------------------------------
