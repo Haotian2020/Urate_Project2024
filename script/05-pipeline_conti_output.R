@@ -101,7 +101,6 @@ data.table::fwrite(dbps1clean,paste0(rdsf_personal,"data/format_data/dbp_s1_GWAS
 write_tsv(dbps2_tophits, file = paste0(rdsf_personal, 'data/format_data/dbp_s2_tophits.tsv'))
 data.table::fwrite(dbps2clean,paste0(rdsf_personal,"data/format_data/dbp_s2_GWAS_tidy_outcome.csv"))
 
-
 # splitted samples: pp gwas format and instruments ----------------------------
 
 pps1clean = ContiOutputFormatFunction(dat_name = "pp_avg_s1_imputed.txt.gz",outcome_name = "PP (UKB s1)",
