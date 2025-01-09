@@ -18,7 +18,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
                                                         "eaf.exposure","beta.exposure","se.exposure","pval_origin.exposure","mr_keep.exposure"))
     
     tophits_list <- list(exptophits1, exptophits2)
-    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    tophits <- bind_rows(tophits_list) %>% dplyr::pull(SNP)
     
     expgwas1 = extract_outcome_data(snps = tophits, outcomes = exp1, proxies = T) 
     expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2, proxies = T) 
@@ -34,7 +34,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
                                                                                                    "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
     
     tophits_list <- list(exptophits1, exptophits2)
-    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    tophits <- bind_rows(tophits_list) %>% dplyr::pull(SNP)
     
     expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv"))
     expgwas2 = vroom(paste0(rdsf_personal,"data/format_data/",exp2,"_GWAS_tidy_outcome.csv"))
@@ -52,7 +52,7 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     exptophits2 = exptophits2[,colnames(exptophits1)]
     
     tophits_list <- list(exptophits1, exptophits2)
-    tophits <- bind_rows(tophits_list) %>% pull(SNP)
+    tophits <- bind_rows(tophits_list) %>% dplyr::pull(SNP)
     
     expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv")) %>% dplyr::select(-c("chr.outcome", "pos.outcome", "pval_origin.outcome"))
     expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2, proxies = T) %>% dplyr::select(colnames(expgwas1))
