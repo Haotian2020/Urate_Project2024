@@ -114,9 +114,9 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
       title = gpar(cex = 1)
     ),
     hrzl_lines = generate_lines(line_number),
-    boxsize = 0.15,
+    boxsize = 0.3,
     line.margin = 0.1,
-    lty.ci = 1,
+    lty.ci = 2,
     col = fpColors(box = "black", lines = "darkgray"),
     lwd.ci = 1,
     ci.vertices = T,
