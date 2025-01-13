@@ -2,7 +2,11 @@
 script/specify_paths.R
 script/bin/
 result
+scripts/ld_token.R
+results
 figures
+MR conference
+
 
 # History files
 .Rhistory
