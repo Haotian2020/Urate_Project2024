@@ -75,11 +75,11 @@ drawbinaryfigure = function(dat,exposure,outcome,xseq,xminxmax){
     hrzl_lines = list(
       
     ),
-    boxsize = 0.15,
-    line.margin = 0.1,
+    boxsize = 0.3,
+    line.margin = 0.2,
     lty.ci = 1,
     col = fpColors(box = "black", lines = "darkgray"),
-    lwd.ci = 1,
+    lwd.ci = 2,
     ci.vertices = T,
     ci.vertices.height = 0.15,
     graphwidth = unit(150, "mm"),
