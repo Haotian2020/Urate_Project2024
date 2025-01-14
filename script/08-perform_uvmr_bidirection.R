@@ -42,8 +42,8 @@ data.table::fwrite(all_instruments, paste0(rdsf_personal,"data/format_data/all_i
 
 # Main analyses between
 # urate CKDGen and egfr CKDGen
-# urate CKDGen and sbp/dbp UKB 
-# sbp/dbp UKB and egfr CKDGen
+# urate CKDGen and sbp/dbp/pp UKB 
+# sbp/dbp/pp UKB and egfr CKDGen
 
 # Sensitivity analyses between
 # urate UKB and eGFR CKDGen
