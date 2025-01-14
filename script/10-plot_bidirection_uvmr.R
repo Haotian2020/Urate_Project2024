@@ -18,7 +18,7 @@ p = uvmr_plot(dat = res,
               out = c("eGFR (CKDGen2019)", "SBP (UKB)", "DBP (UKB)", "PP (UKB)"),
               line_number = 2,
               xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in urate",
-              x_ticks = c(-0.2,-0.15,-0.1,-0.05,0,0.05,0.15,0.2),
+              x_ticks = c(-0.2,-0.1,0,0.1,0.2),
               intervals = c(-0.2,0.2))
 
 pdf(paste0(rdsf_personal,"results/exurate on each outcome forestplot.pdf"),width = 18, height = 5)
@@ -32,7 +32,7 @@ p = uvmr_plot(dat = res,
               out = c("eGFR (CKDGen2019)", "Urate (CKDGen)"),
               line_number = 1,
               xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in SBP",
-              x_ticks = c(-0.2,-0.15,-0.1,-0.05,0,0.05,0.15,0.2),
+              x_ticks = c(-0.2,-0.1,0,0.1,0.2),
               intervals = c(-0.2,0.2))
 
 p
@@ -48,7 +48,7 @@ p = uvmr_plot(dat = res,
               out = c("eGFR (CKDGen2019)", "Urate (CKDGen)"),
               line_number = 1,
               xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in DBP",
-              x_ticks = c(-0.2,-0.15,-0.1,-0.05,0,0.05,0.15,0.2),
+              x_ticks = c(-0.2,-0.1,0,0.1,0.2),
               intervals = c(-0.2,0.2))
 
 p
@@ -65,7 +65,7 @@ p = uvmr_plot(dat = res,
               out = c("eGFR (CKDGen2019)", "Urate (CKDGen)"),
               line_number = 1,
               xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in PP",
-              x_ticks = c(-0.2,-0.15,-0.1,-0.05,0,0.05,0.15,0.2),
+              x_ticks = c(-0.2,-0.1,0,0.1,0.2),
               intervals = c(-0.2,0.2))
 
 p
@@ -81,8 +81,8 @@ p = uvmr_plot(dat = res,
               out = c("SBP (UKB)", "DBP (UKB)", "PP (UKB)", "Urate (CKDGen)"),
               line_number = 2,
               xlabel = "Beta (with 95% CI) for each continuous outcome per SD unit change in log(eGFR)",
-              x_ticks = c(-0.25,-0.2,-0.15,-0.1,-0.05,0,0.05,0.1),
-              intervals = c(-0.25,0.1))
+              x_ticks = c(-0.2,-0.1,0,0.1,0.2),
+              intervals = c(-0.2,0.1))
 
 p
 
