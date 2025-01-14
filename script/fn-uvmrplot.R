@@ -13,7 +13,7 @@ generate_lines <- function(line_number) {
 
 # function to plot UVMR results
 
-uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
+uvmr_plot <- function(dat, exp, out, line_number, xlabel, x_ticks, intervals){
   # remove id.exposure and id.outcome columns ------------------------------------
   
   mydata  <- data.frame(dat) %>%
@@ -115,10 +115,10 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel,x_ticks,intervals) {
     ),
     hrzl_lines = generate_lines(line_number),
     boxsize = 0.3,
-    line.margin = 0.1,
-    lty.ci = 2,
+    line.margin = 0.2,
+    lty.ci = 1,
     col = fpColors(box = "black", lines = "darkgray"),
-    lwd.ci = 1,
+    lwd.ci = 2,
     ci.vertices = T,
     ci.vertices.height = 0.15,
     graphwidth = unit(150, "mm"),
