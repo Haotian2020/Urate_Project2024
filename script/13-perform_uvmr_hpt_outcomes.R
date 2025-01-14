@@ -1,5 +1,6 @@
 # Script for performing MR of urate on early, late -onset and overall hypertension
 
+source("fn-uvmr.R")
 source("fn-binaryplot.R")
 
 # read instruments files -------------------------------------------------------
@@ -20,15 +21,15 @@ for(i in outcomes){
   if(i == "early50"){
     x = 6934
     y = 329146
-    urate_hpt_mr_bin <- uvmr("Urate (CKDGen)",outcome = i,ncase = x,ncontrol = y)
+    urate_hpt_mr_bin <- uvmr("exurate_sd",outcome = i,ncase = x,ncontrol = y)
   }else if(i == "late60"){
     x = 95583
     y = 329146
-    urate_hpt_mr_bin <- uvmr("Urate (CKDGen)",outcome = i,ncase = x,ncontrol = y)
+    urate_hpt_mr_bin <- uvmr("exurate_sd",outcome = i,ncase = x,ncontrol = y)
   }else if(i == "hpt"){
     x = 133680
     y = 329146
-    urate_hpt_mr_bin <- uvmr("Urate (CKDGen)",outcome = i,ncase = x,ncontrol = y)
+    urate_hpt_mr_bin <- uvmr("exurate_sd",outcome = i,ncase = x,ncontrol = y)
   }
   hpt_res = rbind(hpt_res,urate_hpt_mr_bin[[1]],urate_hpt_mr_bin[[4]])
   hpt_pleio = rbind(hpt_pleio,urate_hpt_mr_bin[[2]],urate_hpt_mr_bin[[5]])
@@ -88,12 +89,11 @@ p <- forestplot(
   hrzl_lines = list("7" = gpar(lty = 1, lwd = 1, col = "black"),
                     "12" = gpar(lty = 1, lwd = 1, col = "black")
   ),
-    
-  boxsize = 0.15,
-  line.margin = 0.1,
+  boxsize = 0.3,
+  line.margin = 0.2,
   lty.ci = 1,
   col = fpColors(box = "black", lines = "darkgray"),
-  lwd.ci = 1,
+  lwd.ci = 2,
   ci.vertices = T,
   ci.vertices.height = 0.15,
   graphwidth = unit(150, "mm"),
@@ -106,6 +106,6 @@ p <- forestplot(
 p
 
 dev.off()
-tiff(paste0(rdsf_personal,"results/exurate on all hpt forestplot.tiff"),width = 17, height = 5, res = 300, units = "in")
+pdf(paste0(rdsf_personal,"results/exurate on all hpt forestplot.pdf"),width = 17, height = 5)
 print(p)
 dev.off()
