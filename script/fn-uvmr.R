@@ -1,9 +1,9 @@
 # function for performing UVMR
-# source: https://github.com/venexia/T2DMediationMR/blob/master/code/fn-uvmr.R
+# original source: https://github.com/venexia/T2DMediationMR/blob/master/code/fn-uvmr.R
 
 source("fn-uvmr_scatter.R")
 
-uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1, outcome_sd = 1, plot = FALSE) {
+uvmr <- function(exposure, outcome, ncase = NULL, ncontrol = NULL, exposure_sd = 1, outcome_sd = 1, plot = FALSE) {
   
   # Load instruments -----------------------------------------------------------
   
@@ -39,7 +39,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
   
   if (outcome %in% outcome_list) {
     
-    print(paste0("Reading ",outcome," from local formatted data"))
+    print(paste0("Reading ", outcome, " from local formatted data"))
     out <- TwoSampleMR::read_outcome_data(snps = exp$SNP,
                              filename = paste0(rdsf_personal,"data/format_data/",outcome,"_GWAS_tidy_outcome.csv"),
                              sep = ",",
@@ -83,9 +83,9 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
     mr$type = "Ori"
     
     # save figure --------------------------------------------------------------
-    
+
     if(plot == T) {
-      save_scatter_plot(dat,mr)
+      save_scatter_plot(dat, mr, sf = 0)
     }
     
     ## Calculate Isq -----------------------------------------------------------
@@ -155,6 +155,11 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
     mr_pleio_sf$Isq <- isq_sf
     mr_pleio_sf$type = "Steiger"
     
+    # to save the scatter plot with Steiger Filtering
+
+    if(plot == T) {
+        save_scatter_plot(dat, mr, sf = 1)
+      }
   } else {
     
     mr <- NULL
@@ -162,7 +167,7 @@ uvmr <- function(exposure, outcome,ncase = NULL,ncontrol = NULL, exposure_sd = 1
     
   }
   
-  r <- list(mr, plei, hetero, mr_sf, mr_pleio_sf,mr_hetero_sf)
+  r <- list(mr, plei, hetero, mr_sf, mr_pleio_sf, mr_hetero_sf)
   
   return(r)
 }
