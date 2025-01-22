@@ -36,14 +36,12 @@ bmi_egfr_cys = uvmr("ukb-b-19953", "egfr_cys_sd")
 # 3 Inverse variance weighted  399 -0.3776102 0.01562088 4.235237e-129 Steiger
 # 4               Simple mode  399 -0.3610444 0.07446347  1.786129e-06 Steiger
 # 5             Weighted mode  399 -0.3934113 0.04105014  1.036006e-19 Steiger
-# 
-# [[5]]
+
 # id.exposure id.outcome       outcome                                exposure
 # 1 ukb-b-19953     xzp985 eGFR cys 2021 Body mass index (BMI) || id:ukb-b-19953
 # egger_intercept           se      pval      Isq    type
 # 1    0.0002807193 0.0007600161 0.7120566 0.984295 Steiger
-# 
-# [[6]]
+
 # id.exposure id.outcome       outcome                                exposure
 # 1 ukb-b-19953     xzp985 eGFR cys 2021 Body mass index (BMI) || id:ukb-b-19953
 # 2 ukb-b-19953     xzp985 eGFR cys 2021 Body mass index (BMI) || id:ukb-b-19953
@@ -149,7 +147,6 @@ uratepp_egfr_mvmr = format_mvmrmeta(mvmr_urates1_pps2_egfr$result,mvmr_urates2_p
 uratepp_egfr_mvmr["exposure"][uratepp_egfr_mvmr["exposure"] == "Urate (UKB s1) + Urate (UKB s2)"] <- "Urate (UKB Meta)"
 uratepp_egfr_mvmr["exposure"][uratepp_egfr_mvmr["exposure"] == "PP (UKB s2) + PP (UKB s1)"] <- "PP (UKB Meta)"
 uratepp_egfr_mvmr$outcome = "eGFR (CKDGen2019)"
-
 
 # write results ----------------------------------------------------------------
 
