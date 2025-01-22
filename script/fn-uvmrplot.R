@@ -58,7 +58,22 @@ uvmr_plot <- function(dat, exp, out, line_number, xlabel, x_ticks, intervals){
         "DBP (UKB)",
         "PP (UKB)",
         "BMI",
-        "eGFR (CKDGen2021)",
+        "eGFR (CKDGen2019)",
+        "eGFR (CKDGen2016)"
+      )
+    )
+
+  mydata$outcome <-
+    factor(
+      mydata$outcome,
+      levels = c(
+        "Urate (CKDGen)",
+        "Urate (UKB)",
+        "SBP (UKB)",
+        "DBP (UKB)",
+        "PP (UKB)",
+        "BMI",
+        "eGFR (CKDGen2019)",
         "eGFR (CKDGen2016)"
       )
     )
