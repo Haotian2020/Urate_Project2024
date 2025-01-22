@@ -19,7 +19,7 @@ drawbinaryformat= function(dat){
     factor(
       dat$method,
       levels = c(
-        "Inverse variance weighted","Weighted median",
+        "IVW","Weighted median",
         "Weighted mode","MR Egger", "Simple mode"))
   
   dat$outcome <-
