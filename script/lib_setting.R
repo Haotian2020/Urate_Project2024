@@ -30,4 +30,4 @@ library(reshape)
 library(stringr)
 library(meta)
 library(devtools)
-library(tiff)
+# library(tiff) to save figures in tiff format 
