@@ -4,13 +4,14 @@
 # Wuttke, Li Y., Li M., Sieber, Feitosa, Gorski et al., 2019: eGFR, BUN and CKD associations; trans-ethnic and European American ancestry
 # Pattaro, Teumer, Gorski, Chu, Li, and Mijatovic et al., 2016: Genetic associations at 53 loci highlight cell types and biological pathways relevant for kidney function
 
-for(i in c("SBP (UKB)","DBP (UKB)")){
+for(i in c("SBP (UKB)","DBP (UKB)", "PP (UKB)")){
   
   exp = data.frame(fread(paste0(rdsf_personal,"data/format_data/all_instruments.csv"))) %>% subset(exposure == i)
   
   egfr_out1 <- read_outcome_data(
     snps = exp$SNP,
-    filename = paste0(rdsf_personal,"data/format_data/egfr_GWAS_tidy_outcome.csv"),
+    #filename = paste0(rdsf_personal,"data/format_data/egfr_GWAS_tidy_outcome.csv"),
+    filename = paste0(rdsf_personal,"data/format_data/egfr_sd_GWAS_tidy_outcome.csv"),
     sep = ",",
     phenotype_col = "outcome",
     snp_col = "SNP",
@@ -24,10 +25,10 @@ for(i in c("SBP (UKB)","DBP (UKB)")){
   ) %>% convert_outcome_to_exposure()
   
   egfr_out1$exposure = "log(eGFR)"
-  egfr_out2 = extract_outcome_data(snps = egfr_out1$SNP,outcomes = "ieu-a-1105",proxies = F, access_token = NULL)
+  egfr_out2 = extract_outcome_data(snps = egfr_out1$SNP,outcomes = "ieu-a-1105",proxies = F)
   egfr_out2$outcome = "log(eGFR)"
-  # egfr_out2$beta.outcome = egfr_out2$beta.outcome/0.24
-  # egfr_out2$se.outcome = egfr_out2$se.outcome/0.24
+  egfr_out2$beta.outcome = egfr_out2$beta.outcome/0.24
+  egfr_out2$se.outcome = egfr_out2$se.outcome/0.24
   egfr_har = harmonise_data(exposure_dat = egfr_out1,outcome_dat = egfr_out2,action = 2)
   
   df <- egfr_har[,c("SNP","beta.exposure","se.exposure","exposure","beta.outcome","se.outcome","outcome")]
@@ -46,7 +47,8 @@ for(i in c("SBP (UKB)","DBP (UKB)")){
     ggplot2::theme(legend.position="top", legend.direction="vertical") +
     ggplot2::guides(colour=ggplot2::guide_legend(ncol=2))
 
-  pdf(paste0(rdsf_personal,"results/",i," on 2 egfr scatter.pdf"),width = 6, height = 6)
+  # pdf(paste0(rdsf_personal,"results/",i," on 2 egfr scatter.pdf"),width = 6, height = 6)
+  pdf(paste0(rdsf_personal,"results/",i," on 2 egfr scatter sd.pdf"),width = 6, height = 6)
   print(p)
   dev.off()
 }
