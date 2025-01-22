@@ -34,19 +34,19 @@ pos_res <- rbind(urate_gout_mr[[1]], sbp_stroke_mr[[1]], dbp_stroke_mr[[1]], pp_
                  urate_gout_mr[[4]], sbp_stroke_mr[[4]], dbp_stroke_mr[[4]], pp_stroke_mr[[4]]) %>% generate_odds_ratios()
 
 pos_pleio <- rbind(urate_gout_mr[[2]], sbp_stroke_mr[[2]], dbp_stroke_mr[[2]], pp_stroke_mr[[2]],
-                   urate_gout_mr[[5]], sbp_stroke_mr[[5]], dbp_stroke_mr[[5]], pp_stroke_mr[[5]]) %>% generate_odds_ratios()
+                   urate_gout_mr[[5]], sbp_stroke_mr[[5]], dbp_stroke_mr[[5]], pp_stroke_mr[[5]])
 
 pos_hetero <- rbind(urate_gout_mr[[3]], sbp_stroke_mr[[3]], dbp_stroke_mr[[3]], pp_stroke_mr[[3]],
-                    urate_gout_mr[[6]], sbp_stroke_mr[[6]], dbp_stroke_mr[[6]], pp_stroke_mr[[6]])%>% generate_odds_ratios()
+                    urate_gout_mr[[6]], sbp_stroke_mr[[6]], dbp_stroke_mr[[6]], pp_stroke_mr[[6]])
 
-write.table(pos_res,file = paste0(rdsf_personal,"results/pos_res.csv"),
-            sep= ',', row.names = F,col.names= T)
+write.table(pos_res,file = paste0(rdsf_personal, "results/pos_res.csv"),
+            sep = ',', row.names = F, col.names = T)
 
-write.table(pos_pleio,file = paste0(rdsf_personal,"results/pos_pleio.csv"),
-            sep= ',', row.names = F,col.names= T)
+write.table(pos_pleio,file = paste0(rdsf_personal, "results/pos_pleio.csv"),
+            sep = ',', row.names = F, col.names = T)
 
-write.table(pos_hetero,file = paste0(rdsf_personal,"results/pos_hetero.csv"),
-            sep= ',', row.names = F,col.names= T)
+write.table(pos_hetero,file = paste0(rdsf_personal, "results/pos_hetero.csv"),
+            sep = ',', row.names = F, col.names = T)
 
 # Plot -------------------------------------------------------------------------
 
