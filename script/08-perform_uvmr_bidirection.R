@@ -48,13 +48,13 @@ data.table::fwrite(all_instruments, paste0(rdsf_personal,"data/format_data/all_i
 # Sensitivity analyses between
 # urate UKB and eGFR CKDGen
 
-exposure_name <- c("Urate (CKDGen)", "eGFR (CKDGen2019)", "Urate (UKB)", "SBP (UKB)","DBP (UKB)", "PP (UKB)")
+exposure_name <- c("exurate_sd", "egfr_sd", "urate", "sbp","dbp", "pp")
 outcome_name <- c("egfr_sd", "exurate_sd", "sbp", "dbp", "pp", "urate")
 
 all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
 
-filtered_combinations <- subset(all_combinations, !(exposure %in% c("Urate (UKB)","SBP (UKB)","DBP (UKB)", "PP (UKB)") & outcome %in% c("urate","sbp", "dbp", "pp") |
-                                                    exposure %in% c("urate","sbp", "dbp", "pp") & outcome %in% c("Urate (UKB)","SBP (UKB)","DBP (UKB)", "PP (UKB)")))
+filtered_combinations <- subset(all_combinations, !(exposure %in% c("urate","sbp","dbp", "pp") & outcome %in% c("urate","sbp", "dbp", "pp") |
+                                                    exposure %in% c("urate","sbp", "dbp", "pp") & outcome %in% c("urate","sbp", "dbp", "pp")))
 
 # define the overlap between strings -------------------------------------------
 
@@ -126,17 +126,11 @@ write.table(hetero_sf_bin,file = paste0(rdsf_personal,"results/hetero_sf_bin.csv
 
 # additional analyses between bp and egfr 2016----------------------------------
 # bp on ieu-a-1105 -------------------------------------------------------------
+df1 = uvmr("sbp", "ieu-a-1105", outcome_sd = 0.24)
 
-exposure_name <- c("SBP (UKB)","DBP (UKB)", "PP (UKB)", "ieu-a-1105")
-outcome_name <- c("sbp", "dbp", "pp","ieu-a-1105")
+df2 = uvmr("dbp", "ieu-a-1105", outcome_sd = 0.24)
 
-all_combinations <- expand.grid(exposure = exposure_name, outcome = outcome_name)
-
-df1 = uvmr("SBP (UKB)", "ieu-a-1105", outcome_sd = 0.24)
-
-df2 = uvmr("DBP (UKB)", "ieu-a-1105", outcome_sd = 0.24)
-
-df3 = uvmr("PP (UKB)", "ieu-a-1105", exposure_sd = 0.24)
+df3 = uvmr("pp", "ieu-a-1105", exposure_sd = 0.24)
 
 df4 = uvmr("ieu-a-1105", "sbp", exposure_sd = 0.24)
 
