@@ -1,3 +1,5 @@
+# Script for making the supplementary tables
+
 method_order <- factor(
   levels = c(
     "Inverse variance weighted",
@@ -16,8 +18,9 @@ risk_factor_order <- factor(
     "SBP (UKB)",
     "DBP (UKB)",
     "PP (UKB)",
-    "Urate (UKB s1)", "Urate (UKB s2)", "SBP (UKB s1)",  
-    "SBP (UKB s2)", "DBP (UKB s1)", "DBP (UKB s2)", "PP (UKB s1)", "PP (UKB s2)")
+    "Urate (UKB s1)", "Urate (UKB s2)", "SBP (UKB s1)",
+    "SBP (UKB s2)", "DBP (UKB s1)", "DBP (UKB s2)",
+    "PP (UKB s1)", "PP (UKB s2)")
 )
 
 apply_custom_order <- function(df, order_type) {
@@ -38,17 +41,25 @@ apply_custom_order <- function(df, order_type) {
   return(ordered_df)
 }
 
+# shee number can be different from the supplementary table number
 # genetic instruments sheet ----------------------------------------------------
 
 dat = fread(paste0(rdsf_personal,"data/format_data/all_instruments.csv"))
 
 names(dat) <- sub("\\.exposure", "", names(dat))
 
-selected_col = c("exposure","SNP","effect_allele","other_allele","eaf","beta","se","pval","samplesize","Rsq","F_stat","chr","pos")
+selected_col = c("exposure","SNP","chr","pos","effect_allele","other_allele","eaf","beta","se","pval","samplesize","Rsq","F_stat")
 
 dat <- dat %>% select(all_of(selected_col))
 
 dat <- apply_custom_order(dat,"risk_factor_order")
+
+dat <- dat %>%
+  dplyr::mutate(
+    beta = round(beta, 3),
+    se = round(se, 3),
+    F_stat = round(F_stat, 0)
+  )
 
 data.table::fwrite(dat, paste0(rdsf_personal,"results/shee1.csv"))
 
@@ -91,8 +102,14 @@ dat <- dat[,c("exposure","outcome","method",	"nsnp",	"b", "se", "pval")]
 
 dat <- apply_custom_order(dat,"risk_factor_order")
 
+dat <- dat %>%
+  dplyr::mutate(
+    b = round(b, 3),
+    se = round(se, 3),
+    pval = format(pval, scientific = TRUE)
+  )
+
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee4.csv"))
-# Script for making the supplementary tables
 
 # bidirectional MR sheet (Steiger) ---------------------------------------------
 
@@ -101,6 +118,13 @@ dat = fread(paste0(rdsf_personal,"results/results_sf_bin.csv")) %>% select(-c("t
 dat <- dat[,c("exposure","outcome","method",	"nsnp",	"b", "se", "pval")]
 
 dat <- apply_custom_order(dat,"risk_factor_order")
+
+dat <- dat %>%
+  dplyr::mutate(
+    b = round(b, 3),
+    se = round(se, 3),
+    pval = format(pval, scientific = TRUE)
+  )
 
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee5.csv"))
 
@@ -111,12 +135,26 @@ dat = fread(paste0(rdsf_personal,"results/hpt_res.csv")) %>%
   filter(type == "Ori") %>%
   select(c("exposure","outcome","method",	"nsnp",	"b", "se", "pval","type")) %>% split_outcome()
 
+dat <- dat %>%
+  dplyr::mutate(
+    b = round(b, 3),
+    se = round(se, 3),
+    pval = format(pval, scientific = TRUE)
+  )
+
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee6_1.csv"))
 
 dat = fread(paste0(rdsf_personal,"results/hpt_res.csv")) %>% 
   select(-c("id.exposure","id.outcome")) %>% 
   filter(type == "Steiger") %>%
   select(c("exposure","outcome","method",	"nsnp",	"b", "se", "pval","type")) %>% split_outcome()
+
+dat <- dat %>%
+  dplyr::mutate(
+    b = round(b, 3),
+    se = round(se, 3),
+    pval = format(pval, scientific = TRUE)
+  )
 
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee6_2.csv"))
 
@@ -125,6 +163,13 @@ dat = fread(paste0(rdsf_personal,"results/pos_res.csv")) %>%
   filter(type == "Ori") %>%
   select(c("exposure","outcome","method",	"nsnp",	"b", "se", "pval","type")) %>% split_outcome()
 
+dat <- dat %>%
+  dplyr::mutate(
+    b = round(b, 3),
+    se = round(se, 3),
+    pval = format(pval, scientific = TRUE)
+  )
+
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee6_3.csv"))
 
 dat = fread(paste0(rdsf_personal,"results/pos_res.csv")) %>% 
@@ -132,10 +177,15 @@ dat = fread(paste0(rdsf_personal,"results/pos_res.csv")) %>%
   filter(type == "Steiger") %>%
   select(c("exposure","outcome","method",	"nsnp",	"b", "se", "pval","type")) %>% split_outcome()
 
+dat <- dat %>%
+  dplyr::mutate(
+    b = round(b, 3),
+    se = round(se, 3),
+    pval = format(pval, scientific = TRUE)
+  )
+
 data.table::fwrite(dat,paste0(rdsf_personal,"results/shee6_4.csv"))
 
-# mvmr -------------------------------------------------------------------------
+# mvmr table -----------------------------------------------------------------
 
 # directly use the resutls from "09-perform_mvmr.R"
-
-
