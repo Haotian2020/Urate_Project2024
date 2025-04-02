@@ -103,3 +103,36 @@ stroke_gwas_outcome_format$ncase.outcome = 40585
 # Save formated outcome --------------------------------------------------------
 write.table(stroke_gwas_outcome_format, file = paste0(rdsf_personal,'data/format_data/stroke_GWAS_tidy_outcome.csv'),
             sep= ',', row.names = F,col.names= T)
+
+# MVP CKD GWAS
+# wget https://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs002453/analyses/GIA/phs002453.MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1.analysis-PI.MULTI.tar  
+# tar --wildcards -xvf phs002453.MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1.analysis-PI.MULTI.tar \
+# '*Phe_585_3.EUR*' '*Phe_585.EUR*' '*Phe_585_1.EUR*' && \rm phs002453.MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1.analysis-PI.MULTI.tar
+
+ckd_gwas_outcome = vroom(paste0(rdsf_personal,"data/MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1/MVP_R4.1000G_AGR.Phe_585.EUR.GIA.dbGaP.txt.gz"))
+
+ckd_gwas_outcome <- ckd_gwas_outcome |> separate(ci, into = c("lci", "uci"), sep = ",", convert = TRUE)
+ckd_gwas_outcome$beta = log(ckd_gwas_outcome$or)
+ckd_gwas_outcome$se = (log(ckd_gwas_outcome$uci) - log(ckd_gwas_outcome$lci))/(2*1.96)
+
+ckd_gwas_outcome_format = format_data(
+  data.frame(ckd_gwas_outcome),
+  type = "outcome",
+  snp_col = "SNP_ID",
+  beta_col = "beta",
+  se_col = "se",
+  effect_allele_col = "ea",
+  other_allele_col = "ref",
+  eaf_col = "af",
+  pval_col = "pval",
+  chr_col = "chrom",
+  pos_col = "pos"
+)
+
+ckd_gwas_outcome_format$ncase = 88771
+ckd_gwas_outcome_format$ncontrol = 333750
+ckd_gwas_outcome_format$outcome = "CKD"
+
+# Save formated outcome --------------------------------------------------------
+write.table(ckd_gwas_outcome_format, file = paste0(rdsf_personal,'data/format_data/ckdmvp_GWAS_tidy_outcome.csv'),
+            sep= ',', row.names = F,col.names= T)
