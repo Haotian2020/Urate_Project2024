@@ -54,7 +54,7 @@ uvmr <- function(exposure, outcome, ncase = NULL, ncontrol = NULL, exposure_sd =
                              samplesize_col = "samplesize.outcome")
   } else {
     
-    print(paste0("Reading", outcome,"from IEU open GWAS database"))
+    print(paste0("Reading ", outcome," from IEU open GWAS database"))
     out <- TwoSampleMR::extract_outcome_data(snps = exp$SNP,
                                              outcomes = outcome,
                                              proxies = FALSE)
