@@ -46,16 +46,16 @@ MVMR_function  <- function(exp1,exp2,outcome1){
     
     exptophits1 = fread(paste0(rdsf_personal,"data/format_data/",exp1,"_tophits.tsv")) %>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
                                                                                                     "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
-    exptophits2 = extract_instruments(exp2) %>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
+    exptophits2 = TwoSampleMR::extract_instruments(exp2) %>% dplyr::select(c("SNP","exposure","id.exposure","effect_allele.exposure","other_allele.exposure",
                                                          "eaf.exposure","beta.exposure","se.exposure","pval.exposure","pval_origin.exposure","mr_keep.exposure"))
 
     exptophits2 = exptophits2[,colnames(exptophits1)]
     
     tophits_list <- list(exptophits1, exptophits2)
     tophits <- bind_rows(tophits_list) %>% dplyr::pull(SNP)
-    
+
     expgwas1 = vroom(paste0(rdsf_personal,"data/format_data/",exp1,"_GWAS_tidy_outcome.csv")) %>% dplyr::select(-c("chr.outcome", "pos.outcome", "pval_origin.outcome"))
-    expgwas2 = extract_outcome_data(snps = tophits, outcomes = exp2, proxies = T) %>% dplyr::select(colnames(expgwas1))
+    expgwas2 = TwoSampleMR::extract_outcome_data(snps = tophits, outcomes = exp2, proxies = T, opengwas_jwt = get_opengwas_jwt()) %>% dplyr::select(colnames(expgwas1))
     full_gwas_list <- list(expgwas1, expgwas2)
     print("exp1 is extracted from local")
     print("exp2 is extracted from IEU open GWAS")
