@@ -19,67 +19,51 @@ pos_hetero_sf <- NULL
 pos_pleio_sf <- NULL
 
 # Perform MR -------------------------------------------------------------------
+mr_results <- list(
+  uvmr("urate", "ebi-a-GCST001790", ncase = 2115, ncontrol = 67259),
+  uvmr("sbp", "stroke", ncase = 40585, ncontrol = 406111),
+  uvmr("dbp", "stroke", ncase = 40585, ncontrol = 406111),
+  uvmr("pp", "stroke", ncase = 40585, ncontrol = 406111),
+  uvmr("egfr_sd", "ckdmvp", ncase = 63705, ncontrol = 368937)
+)
 
-urate_gout_mr <- uvmr("urate", "ebi-a-GCST001790", ncase = 2115, ncontrol = 67259)
+combine_results <- function(idx1, idx2) {
+  do.call(rbind, lapply(mr_results, function(res) rbind(res[[idx1]], res[[idx2]])))
+}
 
-sbp_stroke_mr <- uvmr("sbp", "stroke", ncase = 40585, ncontrol = 406111)
+# merge results
+pos_res <- generate_odds_ratios(combine_results(1, 4))
+pos_pleio <- combine_results(2, 5)
+pos_hetero <- combine_results(3, 6)
 
-dbp_stroke_mr <- uvmr("dbp", "stroke", ncase = 40585, ncontrol = 406111)
-
-pp_stroke_mr <- uvmr("pp", "stroke", ncase = 40585, ncontrol = 406111)
-
-# Save the results -------------------------------------------------------------
-
-pos_res <- rbind(urate_gout_mr[[1]], sbp_stroke_mr[[1]], dbp_stroke_mr[[1]], pp_stroke_mr[[1]],
-                 urate_gout_mr[[4]], sbp_stroke_mr[[4]], dbp_stroke_mr[[4]], pp_stroke_mr[[4]]) %>% generate_odds_ratios()
-
-pos_pleio <- rbind(urate_gout_mr[[2]], sbp_stroke_mr[[2]], dbp_stroke_mr[[2]], pp_stroke_mr[[2]],
-                   urate_gout_mr[[5]], sbp_stroke_mr[[5]], dbp_stroke_mr[[5]], pp_stroke_mr[[5]])
-
-pos_hetero <- rbind(urate_gout_mr[[3]], sbp_stroke_mr[[3]], dbp_stroke_mr[[3]], pp_stroke_mr[[3]],
-                    urate_gout_mr[[6]], sbp_stroke_mr[[6]], dbp_stroke_mr[[6]], pp_stroke_mr[[6]])
-
-write.table(pos_res,file = paste0(rdsf_personal, "results/pos_res.csv"),
-            sep = ',', row.names = F, col.names = T)
-
-write.table(pos_pleio,file = paste0(rdsf_personal, "results/pos_pleio.csv"),
-            sep = ',', row.names = F, col.names = T)
-
-write.table(pos_hetero,file = paste0(rdsf_personal, "results/pos_hetero.csv"),
-            sep = ',', row.names = F, col.names = T)
+# save files
+write.table(pos_res, file = paste0(rdsf_personal, "results/pos_res.csv"),
+            sep = ',', row.names = FALSE, col.names = TRUE)
+write.table(pos_pleio, file = paste0(rdsf_personal, "results/pos_pleio.csv"),
+            sep = ',', row.names = FALSE, col.names = TRUE)
+write.table(pos_hetero, file = paste0(rdsf_personal, "results/pos_hetero.csv"),
+            sep = ',', row.names = FALSE, col.names = TRUE)
 
 # Plot -------------------------------------------------------------------------
 
-mydata = fread(paste0(rdsf_personal,"results/pos_res.csv")) %>% subset(exposure == "Urate (UKB)"&type == "Ori")%>%drawbinaryformat()
-p1 = drawbinaryfigure(mydata, "urate", "gout", c(1,4,8,12), c(1,12))
+all_data <- fread(paste0(rdsf_personal, "results/pos_res.csv"))
 
-mydata = fread(paste0(rdsf_personal,"results/pos_res.csv"))%>%subset(exposure == "SBP (UKB)"&type == "Ori")%>%drawbinaryformat()
-p2 = drawbinaryfigure(mydata, "SBP", "stroke", c(1,1.5,2,2.5), c(1,2.5))
+# define parameters in the plot
+plot_list <- list(
+  list(exposure = "Urate (UKB)", lab = "urate", outcome = "gout", xvals = c(1,4,8,12), ylim = c(1,12), letter = "A", filename = "urate on gout forestplot.pdf"),
+  list(exposure = "SBP (UKB)", lab = "SBP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "B", filename = "sbp on stroke forestplot.pdf"),
+  list(exposure = "DBP (UKB)", lab = "DBP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "C", filename = "dbp on stroke forestplot.pdf"),
+  list(exposure = "PP (UKB)", lab = "PP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "D", filename = "pp on stroke forestplot.pdf"),
+  list(exposure = "eGFR", lab = "PP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "D", filename = "pp on stroke forestplot.pdf"),
+)
 
-mydata = fread(paste0(rdsf_personal,"results/pos_res.csv"))%>%subset(exposure == "DBP (UKB)"&type == "Ori")%>%drawbinaryformat()
-p3 = drawbinaryfigure(mydata, "DBP", "stroke", c(1,1.5,2,2.5), c(1,2.5))
 
-mydata = fread(paste0(rdsf_personal,"results/pos_res.csv"))%>%subset(exposure == "PP (UKB)"&type == "Ori")%>%drawbinaryformat()
-p4 = drawbinaryfigure(mydata, "PP", "stroke", c(1,1.5,2,2.5), c(1,2.5))
-
-dev.off()
-pdf(paste0(rdsf_personal,"results/urate on gout forestplot.pdf"), width = 17, height = 2.5)
-plot.new()
-mtext("A)",side = 3, line = 2, adj = 0, cex = 1.5, padj = 0)
-print(p1)
-dev.off()
-pdf(paste0(rdsf_personal,"results/sbp on stroke forestplot.pdf"), width = 17, height = 2.5)
-plot.new()
-print(p2)
-mtext("B)",side = 3, line = 2, adj = 0, cex = 1.5, padj = 0)
-dev.off()
-pdf(paste0(rdsf_personal,"results/dbp on stroke forestplot.pdf"), width = 17, height = 2.5)
-plot.new()
-print(p3)
-mtext("C)",side = 3, line = 2, adj = 0, cex = 1.5, padj = 0)
-dev.off()
-pdf(paste0(rdsf_personal,"results/pp on stroke forestplot.pdf"), width = 17, height = 2.5)
-plot.new()
-print(p4)
-mtext("D)",side = 3, line = 2, adj = 0, cex = 1.5, padj = 0)
-dev.off()
+for (pinfo in plot_list) {
+  mydata <- subset(all_data, exposure == pinfo$exposure & type == "Ori")
+  p <- drawbinaryfigure(mydata, pinfo$lab, pinfo$outcome, pinfo$xvals, pinfo$ylim)
+  pdf(paste0(rdsf_personal, "results/", pinfo$filename), width = 17, height = 2.5)
+  plot.new()
+  mtext(paste0(pinfo$letter, ")"), side = 3, line = 2, adj = 0, cex = 1.5, padj = 0)
+  print(p)
+  dev.off()
+}
