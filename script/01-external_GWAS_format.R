@@ -109,7 +109,7 @@ write.table(stroke_gwas_outcome_format, file = paste0(rdsf_personal,'data/format
 # tar --wildcards -xvf phs002453.MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1.analysis-PI.MULTI.tar \
 # '*Phe_585_3.EUR*' '*Phe_585.EUR*' '*Phe_585_1.EUR*' && \rm phs002453.MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1.analysis-PI.MULTI.tar
 
-ckd_gwas_outcome = vroom(paste0(rdsf_personal,"data/MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1/MVP_R4.1000G_AGR.Phe_585.EUR.GIA.dbGaP.txt.gz"))
+ckd_gwas_outcome = vroom(paste0(rdsf_personal,"data/MVP_R4.1000G_AGR.GIA.PheCodes_Genitourinary_batch1/MVP_R4.1000G_AGR.Phe_585_3.EUR.GIA.dbGaP.txt.gz"))
 
 ckd_gwas_outcome <- ckd_gwas_outcome |> separate(ci, into = c("lci", "uci"), sep = ",", convert = TRUE)
 ckd_gwas_outcome$beta = log(ckd_gwas_outcome$or)
@@ -129,8 +129,8 @@ ckd_gwas_outcome_format = format_data(
   pos_col = "pos"
 )
 
-ckd_gwas_outcome_format$ncase = 88771
-ckd_gwas_outcome_format$ncontrol = 333750
+ckd_gwas_outcome_format$ncase = 63705
+ckd_gwas_outcome_format$ncontrol = 368937
 ckd_gwas_outcome_format$outcome = "CKD"
 
 # Save formated outcome --------------------------------------------------------
