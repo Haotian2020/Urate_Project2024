@@ -54,14 +54,16 @@ plot_list <- list(
   list(exposure = "SBP (UKB)", lab = "SBP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "B", filename = "sbp on stroke forestplot.pdf"),
   list(exposure = "DBP (UKB)", lab = "DBP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "C", filename = "dbp on stroke forestplot.pdf"),
   list(exposure = "PP (UKB)", lab = "PP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "D", filename = "pp on stroke forestplot.pdf"),
-  list(exposure = "eGFR", lab = "PP", outcome = "stroke", xvals = c(1,1.5,2,2.5), ylim = c(1,2.5), letter = "D", filename = "pp on stroke forestplot.pdf"),
+  list(exposure = "eGFR (CKDGen2019)", lab = "eGFR", outcome = "CKD", xvals = c(0.25,0.5,0.75,1), ylim = c(0.25,1), letter = "E", filename = "egfr on ckd forestplot.pdf")
 )
-
 
 for (pinfo in plot_list) {
   mydata <- subset(all_data, exposure == pinfo$exposure & type == "Ori")
+  mydata <- drawbinaryformat(mydata)
   p <- drawbinaryfigure(mydata, pinfo$lab, pinfo$outcome, pinfo$xvals, pinfo$ylim)
-  pdf(paste0(rdsf_personal, "results/", pinfo$filename), width = 17, height = 2.5)
+  width_val <- if (pinfo$exposure == "eGFR (CKDGen2019)") 17 else 16
+  
+  pdf(paste0(rdsf_personal, "results/", pinfo$filename), width = width_val, height = 2.5)
   plot.new()
   mtext(paste0(pinfo$letter, ")"), side = 3, line = 2, adj = 0, cex = 1.5, padj = 0)
   print(p)
