@@ -13,19 +13,26 @@ drawbinaryformat= function(dat){
            ", ",
            format(round(dat$or_uci95, digits = 3),
                   nsmall = 3))
-  dat$pvalue <-
-    format(round(dat$pval, digits = 3))
+  
+  dat$pvalue <- formatC(dat$pval, format = "f", digits = 3)
+  
+  print(dat)
+  
   dat$method <-
     factor(
       dat$method,
       levels = c(
-        "IVW","Weighted median",
+        "Inverse variance weighted","Weighted median",
         "Weighted mode","MR Egger", "Simple mode"))
+  
+  dat <- dat %>%
+    mutate(method = if_else(method == "Inverse variance weighted", "IVW", method))
+           # exposure = str_remove(exposure, "\\s*\\([^\\)]*\\)"))
   
   dat$outcome <-
     factor(
       dat$outcome,
-      levels = c("Gout","Stroke",
+      levels = c("Gout","Stroke","CKD",
                  "Hypertension (UKB)",
                  "Early-onset hypertension (UKB)",
                  "Late-onset hypertension (UKB)"
